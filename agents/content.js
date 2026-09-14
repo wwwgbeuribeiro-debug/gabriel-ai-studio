@@ -13,6 +13,20 @@ const {
     listarEventosSeguros
 } = require("../tools/events");
 
+function removerChamadaDoAgente(tarefa) {
+    return tarefa
+        .trim()
+        .replace(
+            /^jairo\s*[,;:\-]?\s*/i,
+            ""
+        )
+        .replace(
+            /^por favor\s*[,;:\-]?\s*/i,
+            ""
+        )
+        .trim();
+}
+
 function montarContextoReal() {
     const eventosReais = listarEventosSeguros(30);
     const memoria = carregarMemoria();
@@ -54,17 +68,21 @@ function montarContextoReal() {
 }
 
 async function content(tarefa) {
+    // Remove a chamada ao agente no início da tarefa, se houver.
+    // Ex.: "Jairo, faça um reel" -> "faça um reel"
+    const tarefaProcessada = removerChamadaDoAgente(tarefa);
+
     console.log("🎬 Jairo recebeu a tarefa:");
-    console.log(tarefa);
+    console.log(tarefaProcessada);
 
     emitirEvento(
         "Jairo",
         "inicio",
-        `Recebeu a tarefa: ${tarefa}`
+        `Recebeu a tarefa: ${tarefaProcessada}`
     );
 
     const tarefaMemoria = criarTarefa(
-        tarefa,
+        tarefaProcessada,
         "Jairo"
     );
 
@@ -148,7 +166,7 @@ CONTEXTO REAL DO STUDIO (EVENTOS E TRABALHO EXECUTADO):
 ${contextoReal}
 
 TAREFA:
-${tarefa}
+${tarefaProcessada}
 `);
 
     adicionarProgresso(

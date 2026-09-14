@@ -5,15 +5,16 @@ const developer = require("./developer");
 const content = require("./content");
 
 function decidirLocalmente(tarefa) {
-    const texto = tarefa.toLowerCase();
+    const texto = tarefa.toLowerCase().trim();
 
-    // Quando o usuário chama um agente pelo nome,
+    // Quando o usuário chama um agente pelo nome no início da tarefa,
     // respeitamos isso antes da classificação por palavras.
-    if (texto.includes("severino")) {
+    // Essa regra tem prioridade absoluta sobre a contagem de palavras-chave.
+    if (/^severino\s*[,;:\-]?\s*/.test(texto)) {
         return "DEV";
     }
 
-    if (texto.includes("jairo")) {
+    if (/^jairo\s*[,;:\-]?\s*/.test(texto)) {
         return "CONTENT";
     }
 
