@@ -1,3 +1,5 @@
+const { carregarAtividade, salvarAtividade } = require("./activity");
+
 const eventos = [];
 let ultimoId = Date.now();
 
@@ -12,7 +14,7 @@ function gerarId() {
     return ultimoId;
 }
 
-function emitirEvento(agente, tipo, mensagem) {
+function emitirRegistro(agente, tipo, mensagem) {
     const evento = {
         id: gerarId(),
         agente,
@@ -31,7 +33,32 @@ function emitirEvento(agente, tipo, mensagem) {
         `📡 ${agente}: ${mensagem}`
     );
 
+    // Persistir de forma assíncrona e não bloqueante
+    setImmediate(() => persistirAtividade(evento));
+
     return evento;
+}
+
+function persistirAtividade(evento) {
+    // Verifica se é sensível
+    if (eSensivel(evento.mensagem)) {
+        return;
+    }
+
+    // Cria um objeto resumido
+    const registro = {
+        agente: evento.agente,
+        tipo: evento.tipo,
+        horario: evento.horario,
+        mensagem: evento.mensagem.slice(0, 200) // Trunca a mensagem
+    };
+
+    // Carrega o histórico existente
+    let historico = carregarAtividade();
+    historico.push(registro);
+
+    // Salva de volta
+    salvarAtividade(historico);
 }
 
 function listarEventos() {
@@ -63,7 +90,7 @@ function listarEventosSeguros(limite = 50) {
 }
 
 module.exports = {
-    emitirEvento,
+    emitirRegistro,
     listarEventos,
     listarEventosSeguros
 };
