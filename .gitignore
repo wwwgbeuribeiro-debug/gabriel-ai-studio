@@ -2,3 +2,8 @@
 node_modules/
 backups/
 memory/tasks.json
+memory/backups/
+memory/change-history.json
+gabriel-ai-studio-upgrade*/
+gabriel-ai-studio-hotfix*/
+gabriel-ai-studio-git-upgrade*/

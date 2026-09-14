@@ -118,11 +118,11 @@ function processarStatusDoEvento(evento) {
             investigacao: "Mapeando projeto...",
             analise: "Escolhendo arquivos...",
             plano: "Criando plano...",
-            backup: "Criando backup...",
+            backup: "Protegendo no Git...",
             edicao: "Alterando código...",
             teste: "Testando alterações...",
             correcao: "Corrigindo erro...",
-            rollback: "Restaurando backup...",
+            rollback: "Revertendo no Git...",
             ia: "Gerando análise..."
         };
 

@@ -5,12 +5,15 @@ const {
     arquivoExiste,
     lerArquivo,
     escreverArquivo,
+    resolverCaminhoSeguro
+} = require("../tools/workspace");
+
+const {
     criarBackup,
     restaurarBackup,
-    resolverCaminhoSeguro,
     registrarMudancaConcluida,
     desfazerMudanca
-} = require("../tools/workspace");
+} = require("../tools/git-workspace");
 
 const {
     testarAlteracoes
@@ -431,7 +434,7 @@ async function developer(tarefa) {
 
         definirProximoPasso(
             tarefaMemoria.id,
-            "Localizar a alteração registrada e restaurar o backup."
+            "Localizar a alteração registrada no Git e criar uma reversão segura."
         );
 
         try {
@@ -452,7 +455,7 @@ async function developer(tarefa) {
             emitirEvento(
                 "Severino",
                 "rollback",
-                `Restaurando ${desfeita.arquivos.length} arquivo(s) da tarefa ${desfeita.idTarefa}...`
+                `Revertendo pelo Git ${desfeita.arquivos.length} arquivo(s) da tarefa ${desfeita.idTarefa}...`
             );
 
             const teste = await testarAlteracoes(
@@ -542,7 +545,7 @@ async function developer(tarefa) {
         emitirEvento(
             "Severino",
             "backup",
-            "Backup de segurança criado."
+            `Checkpoint Git confirmado em ${backup.commit.slice(0, 8)}.`
         );
 
         try {
@@ -571,7 +574,7 @@ async function developer(tarefa) {
                 restaurarBackup(backup);
 
                 throw new Error(
-                    `A validação falhou. O backup foi restaurado. ${formatarTestes(teste)}`
+                    `A validação falhou. O checkpoint Git foi restaurado. ${formatarTestes(teste)}`
                 );
             }
 
@@ -853,7 +856,7 @@ REGRAS OBRIGATÓRIAS:
     emitirEvento(
         "Severino",
         "backup",
-        `Criando backup de ${arquivosAlterados.length} arquivo(s)...`
+        `Protegendo ${arquivosAlterados.length} arquivo(s) com checkpoint Git...`
     );
 
     const backup = criarBackup(
@@ -863,7 +866,7 @@ REGRAS OBRIGATÓRIAS:
 
     adicionarProgresso(
         tarefaMemoria.id,
-        `Backup criado antes das alterações: ${backup.pastaBackup}`
+        `Checkpoint Git antes das alterações: ${backup.commit}`
     );
 
     try {
@@ -995,7 +998,7 @@ REGRAS:
             emitirEvento(
                 "Severino",
                 "rollback",
-                "Validação falhou. Restaurando os arquivos originais..."
+                "Validação falhou. Restaurando o checkpoint Git..."
             );
 
             restaurarBackup(backup);
@@ -1011,7 +1014,7 @@ REGRAS:
             );
 
             throw new Error(
-                `Não consegui validar a alteração após ${MAX_TENTATIVAS_CORRECAO} tentativas. O backup original foi restaurado.`
+                `Não consegui validar a alteração após ${MAX_TENTATIVAS_CORRECAO} tentativas. O checkpoint Git foi restaurado.`
             );
         }
 
