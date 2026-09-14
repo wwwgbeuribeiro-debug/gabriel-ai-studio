@@ -1,0 +1,28 @@
+0:00‑0:04 | Abertura
+Visual: Tela do estúdio carregando. Painel de atividade mostra:
+📡 Carlos: Recebeu a tarefa: Severino, crie um arquivo teste-autonomia.txt com a frase Autonomia funcionando.
+
+0:04‑0:08 | Delegação
+Visual: Carlos analisa e envia a tarefa ao desenvolvedor.
+📡 Carlos: Tarefa enviada para Severino.
+📡 Severino: Recebeu a tarefa: Severino, crie um arquivo teste-autonomia.txt com a frase Autonomia funcionando.
+
+0:08‑0:12 | Criação segura
+Visual: Severino cria um checkpoint Git e escreve o arquivo.
+📡 Severino: Checkpoint Git confirmado em f2a9224
+📡 Severino: Criou teste-autonomia.txt
+📡 Severino: Validando o arquivo criado...
+📡 Severino: Arquivo teste-autonomia.txt criado e validado.
+
+0:12‑0:16 | Conclusão e novo pedido
+Visual: Carlos registra a conclusão e imediatamente pede o desfazer.
+📡 Carlos: Tarefa concluída por Severino.
+📡 Carlos: Recebeu a tarefa: Severino, desfaça a última alteração.
+
+0:16‑0:20 | Rollback e fechamento
+Visual: Carlos delega o desfazer, Severino localiza, reverte pelo Git e confirma.
+📡 Carlos: Tarefa enviada para Severino.
+📡 Severino: Localizando a alteração task-1789405228019...
+📡 Severino: Revertendo pelo Git 1 arquivo(s) da tarefa task-1789405228019...
+📡 Severino: Alteração task-1789405228019 desfeita com sucesso.
+📡 Carlos: Tarefa concluída por Severino.
