@@ -289,7 +289,7 @@ ${resposta}
     }
 }
 
-function montarContexto(arquivos) {
+function extrairAlteracoesEmBlocos(texto) {\n\n    const resumoEncontrado = texto.match(\n        /<<<RESUMO>>>\s*([\s\S]*?)\s*<<<FIM_RESUMO>>>/i\n    );\n\n    const regexArquivo =\n        /<<<ARQUIVO:\s*([^\r\n>]+)\s*>>>\r?\n([\s\S]*?)\r?\n<<<FIM_ARQUIVO>>>/gi;\n\n    const changes = [];\n\n    let encontrado;\n\n    while (\n        (encontrado = regexArquivo.exec(texto)) !== null\n    ) {\n\n        changes.push({\n            path: encontrado[1].trim(),\n            content: encontrado[2]\n        });\n    }\n\n    return {\n        resumo: resumoEncontrado\n            ? resumoEncontrado[1].trim()\n            : "Implementação realizada.",\n\n        changes\n    };\n}\n\n\nasync function pedirAlteracoes(prompt) {\n\n    let resposta = await usarIA(prompt);\n\n    let proposta =\n        extrairAlteracoesEmBlocos(resposta);\n\n    if (proposta.changes.length > 0) {\n        return proposta;\n    }\n\n    resposta = await usarIA(\n        prompt +\n        "\n\nATENÇÃO: a resposta anterior não respeitou o formato. " +\n        "Use obrigatoriamente os marcadores <<<RESUMO>>>, <<<FIM_RESUMO>>>, " +\n        "<<<ARQUIVO: caminho>>> e <<<FIM_ARQUIVO>>>. " +\n        "Não use JSON e não use markdown ao redor dos arquivos."\n    );\n\n    proposta =\n        extrairAlteracoesEmBlocos(resposta);\n\n    if (proposta.changes.length === 0) {\n        throw new Error(\n            "A IA não forneceu alterações no formato de arquivos esperado."\n        );\n    }\n\n    return proposta;\n}\n\nfunction montarContexto(arquivos) {
     let contexto = "";
 
     for (const arquivo of arquivos) {
@@ -852,47 +852,9 @@ REGRAS:
         "Preparando alterações no código..."
     );
 
-    const proposta = await pedirJSON(`
-Você é Severino, desenvolvedor do Gabriel AI Studio.
-
-Implemente a tarefa abaixo.
-
-TAREFA:
-${tarefa}
-
-PLANO:
-${JSON.stringify(plano, null, 2)}
-
-ARQUIVOS REAIS DISPONÍVEIS:
-${contexto}
-
-ESTRUTURA DO PROJETO:
-${estrutura.join("\n")}
-
-Responda SOMENTE com JSON válido no formato:
-{
-  "resumo": "resumo da implementação",
-  "changes": [
-    {
-      "path": "caminho/do/arquivo.js",
-      "content": "CONTEÚDO COMPLETO DO ARQUIVO"
-    }
-  ]
-}
-
-REGRAS OBRIGATÓRIAS:
-- Cada content deve conter o arquivo COMPLETO, não um patch.
-- Pode criar arquivos novos quando necessário.
-- Não altere .env, credenciais, chaves, .git ou node_modules.
-- Preserve funcionalidades existentes que não fazem parte da tarefa.
-- Use somente Node.js e dependências já existentes, a menos que seja impossível.
-- Não execute comandos.
-- Não inclua markdown fora do JSON.
-`);
-
-    let mudancas =
+    const proposta = await pedirAlteracoes(`\nVocê é Severino, desenvolvedor do Gabriel AI Studio.\n\nImplemente a tarefa abaixo.\n\nTAREFA:\n${tarefa}\n\nPLANO:\n${JSON.stringify(plano, null, 2)}\n\nARQUIVOS REAIS DISPONÍVEIS:\n${contexto}\n\nESTRUTURA DO PROJETO:\n${estrutura.join("\n")}\n\nFORMATO OBRIGATÓRIO:\n\n<<<RESUMO>>>\nresumo curto do que foi implementado\n<<<FIM_RESUMO>>>\n\n<<<ARQUIVO: caminho/do/arquivo.js>>>\nCONTEÚDO COMPLETO DO ARQUIVO\n<<<FIM_ARQUIVO>>>\n\nSe precisar alterar mais arquivos, repita o bloco\n<<<ARQUIVO: ...>>>.\n\nREGRAS:\n- Cada arquivo deve conter o conteúdo COMPLETO.\n- Pode criar arquivos novos quando necessário.\n- Não altere .env, credenciais, chaves, .git ou node_modules.\n- Preserve funcionalidades que não fazem parte da tarefa.\n- Não execute comandos.\n- NÃO use JSON para devolver código.\n- NÃO coloque blocos markdown ao redor dos arquivos.\n`);\n\n    let mudancas =
         validarMudancas(
-            extrairMudancasDaProposta(proposta)
+            proposta.changes
         );
 
     const arquivosAlterados = mudancas.map(
@@ -978,40 +940,9 @@ REGRAS OBRIGATÓRIAS:
                     arquivosAlterados
                 );
 
-            const correcao = await pedirJSON(`
-Você é Severino corrigindo uma implementação que falhou
-na validação local.
-
-TAREFA ORIGINAL:
-${tarefa}
-
-ERROS DOS TESTES:
-${formatarTestes(teste)}
-
-ARQUIVOS ATUAIS:
-${contextoAtual}
-
-Responda SOMENTE com JSON válido:
-{
-  "resumo": "o que foi corrigido",
-  "changes": [
-    {
-      "path": "arquivo.js",
-      "content": "CONTEÚDO COMPLETO CORRIGIDO"
-    }
-  ]
-}
-
-REGRAS:
-- Corrija somente o necessário.
-- Não toque em .env, credenciais ou node_modules.
-- content deve ser o arquivo completo.
-- Não use markdown fora do JSON.
-`);
-
-            const correcoes =
+            const correcao = await pedirAlteracoes(`\nVocê é Severino corrigindo uma implementação que falhou\nna validação local.\n\nTAREFA ORIGINAL:\n${tarefa}\n\nERROS DOS TESTES:\n${formatarTestes(teste)}\n\nARQUIVOS ATUAIS:\n${contextoAtual}\n\nFORMATO OBRIGATÓRIO:\n\n<<<RESUMO>>>\nresumo da correção\n<<<FIM_RESUMO>>>\n\n<<<ARQUIVO: caminho/do/arquivo.js>>>\nCONTEÚDO COMPLETO CORRIGIDO\n<<<FIM_ARQUIVO>>>\n\nREGRAS:\n- Corrija somente o necessário.\n- Não toque em .env, credenciais ou node_modules.\n- Cada arquivo deve ser devolvido completo.\n- NÃO use JSON para devolver código.\n- NÃO use markdown ao redor dos arquivos.\n`);\n\n            const correcoes =
                 validarMudancas(
-                    extrairMudancasDaProposta(correcao)
+                    correcao.changes
                 );
 
             for (const mudanca of correcoes) {
