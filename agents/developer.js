@@ -114,6 +114,34 @@ function tarefaPedeAlteracao(tarefa) {
 }
 
 
+function tarefaSomenteLeitura(tarefa) {
+
+    const texto = tarefa
+        .toLowerCase()
+        .trim();
+
+    const padroes = [
+
+        /\bnão\s+(?:altere|modifique|edite|mude|crie|remova|apague|escreva|salve)\b/,
+
+        /\bnao\s+(?:altere|modifique|edite|mude|crie|remova|apague|escreva|salve)\b/,
+
+        /\bsem\s+(?:alterar|modificar|editar|mudar|criar|remover|apagar|escrever|salvar)\b/,
+
+        /\bsomente\s+(?:analise|análise|investigue|explique|liste|diga|verifique|revise)\b/,
+
+        /\bapenas\s+(?:analise|análise|investigue|explique|liste|diga|verifique|revise)\b/,
+
+        /\bmodo\s+(?:somente\s+leitura|leitura|read[- ]?only)\b/
+
+    ];
+
+    return padroes.some(
+        padrao => padrao.test(texto)
+    );
+}
+
+
 function removerChamadaDoAgente(tarefa) {
     return tarefa
         .trim()
@@ -517,10 +545,13 @@ async function developer(tarefa) {
     // TAREFAS SIMPLES E DETERMINÍSTICAS
     // ========================================
 
+    const somenteLeitura =
+        tarefaSomenteLeitura(tarefa);
+
     const criacaoSimples =
         detectarCriacaoArquivoSimples(tarefa);
 
-    if (criacaoSimples) {
+    if (!somenteLeitura && criacaoSimples) {
         const caminhoSeguro =
             resolverCaminhoSeguro(
                 criacaoSimples.path
@@ -690,7 +721,22 @@ async function developer(tarefa) {
         montarContexto(arquivosEscolhidos);
 
     const deveAlterar =
+        !somenteLeitura &&
         tarefaPedeAlteracao(tarefa);
+
+    if (somenteLeitura) {
+
+        adicionarProgresso(
+            tarefaMemoria.id,
+            "Modo somente leitura confirmado. Nenhum arquivo será alterado."
+        );
+
+        emitirEvento(
+            "Severino",
+            "analise",
+            "Modo somente leitura: nenhum arquivo será alterado."
+        );
+    }
 
     if (!deveAlterar) {
         atualizarStatus(
