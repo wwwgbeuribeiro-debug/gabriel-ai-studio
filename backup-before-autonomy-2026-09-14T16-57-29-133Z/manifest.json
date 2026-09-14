@@ -1,0 +1,30 @@
+[
+  {
+    "relativo": "agents\\content.js",
+    "existia": true
+  },
+  {
+    "relativo": "agents\\coordinator.js",
+    "existia": true
+  },
+  {
+    "relativo": "agents\\developer.js",
+    "existia": true
+  },
+  {
+    "relativo": "public\\app.js",
+    "existia": true
+  },
+  {
+    "relativo": "tools\\events.js",
+    "existia": true
+  },
+  {
+    "relativo": "tools\\tester.js",
+    "existia": false
+  },
+  {
+    "relativo": "tools\\workspace.js",
+    "existia": false
+  }
+]

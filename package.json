@@ -1,0 +1,11 @@
+{
+  "name": "gabriel-ai-studio",
+  "version": "1.0.0",
+  "description": "Sistema de agentes de IA",
+  "main": "server.js",
+  "dependencies": {
+    "@google/genai": "^2.22.0",
+    "dotenv": "^17.4.2",
+    "groq-sdk": "^1.6.0"
+  }
+}

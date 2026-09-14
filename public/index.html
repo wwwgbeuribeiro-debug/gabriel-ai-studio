@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gabriel AI Studio</title>
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+    <main class="studio">
+
+        <header>
+            <div>
+                <span class="mini-titulo">MULTI-AGENT WORKSPACE</span>
+                <h1>Gabriel AI Studio</h1>
+                <p>Sua equipe digital trabalhando em tempo real.</p>
+            </div>
+
+            <div class="sistema-online">
+                <span class="bolinha online"></span>
+                SISTEMA ONLINE
+            </div>
+        </header>
+
+
+        <section class="agentes">
+
+            <article class="agente-card">
+                <div class="avatar">🧠</div>
+
+                <div>
+                    <span class="funcao">COORDENADOR</span>
+                    <h2>Carlos</h2>
+                    <p>Distribui e acompanha as tarefas.</p>
+
+                    <div class="status">
+                        <span class="bolinha online"></span>
+                        <span id="status-carlos">Livre</span>
+                    </div>
+                </div>
+            </article>
+
+
+            <article class="agente-card">
+                <div class="avatar">💻</div>
+
+                <div>
+                    <span class="funcao">DEVELOPER</span>
+                    <h2>Severino</h2>
+                    <p>Investiga código e projetos.</p>
+
+                    <div class="status">
+                        <span class="bolinha online"></span>
+                        <span id="status-severino">Livre</span>
+                    </div>
+                </div>
+            </article>
+
+
+            <article class="agente-card">
+                <div class="avatar">🎬</div>
+
+                <div>
+                    <span class="funcao">CONTENT</span>
+                    <h2>Jairo</h2>
+                    <p>Transforma trabalho em conteúdo.</p>
+
+                    <div class="status">
+                        <span class="bolinha online"></span>
+                        <span id="status-jairo">Livre</span>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+
+
+        <section class="painel">
+
+            <div class="comando">
+
+                <span class="mini-titulo">
+                    NOVA TAREFA
+                </span>
+
+                <h2>O que a equipe vai fazer?</h2>
+
+                <textarea
+                    id="tarefa"
+                    placeholder="Ex: Severino, analise meu projeto e procure possíveis melhorias..."
+                ></textarea>
+
+                <div class="acoes">
+
+                    <button
+                        id="botao-voz"
+                        class="secundario"
+                        type="button"
+                    >
+                        🎙️ Falar
+                    </button>
+
+                    <button
+                        id="botao-executar"
+                        type="button"
+                    >
+                        ▶ Executar tarefa
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <aside class="infraestrutura">
+
+                <span class="mini-titulo">
+                    INFRAESTRUTURA
+                </span>
+
+                <h2>Motores</h2>
+
+                <div class="motor">
+                    <span>🧠 Gemini</span>
+                    <strong>Disponível</strong>
+                </div>
+
+                <div class="motor">
+                    <span>⚡ Groq</span>
+                    <strong>Disponível</strong>
+                </div>
+
+                <div class="motor">
+                    <span>🌐 OpenRouter</span>
+                    <strong>Disponível</strong>
+                </div>
+
+                <div class="memoria">
+                    💾 Memória ativa
+                </div>
+
+            </aside>
+
+        </section>
+
+
+        <section class="atividade">
+
+            <span class="mini-titulo">
+                ATIVIDADE
+            </span>
+
+            <div id="atividade-log">
+
+                <p class="atividade-vazia">
+                    Nenhuma tarefa executada ainda.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="/app.js"></script>
+
+</body>
+
+</html>

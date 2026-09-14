@@ -1,0 +1,294 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(
+            circle at top,
+            #18223b 0%,
+            #090d17 45%,
+            #05070c 100%
+        );
+
+    color: #f4f7ff;
+
+    font-family:
+        Inter,
+        Arial,
+        sans-serif;
+}
+
+.studio {
+    width: min(1180px, 92%);
+    margin: auto;
+    padding: 50px 0;
+}
+
+
+/* HEADER */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+header h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    margin: 6px 0;
+}
+
+header p {
+    color: #8993a8;
+}
+
+.mini-titulo {
+    color: #667eea;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.sistema-online {
+    background: #101722;
+    border: 1px solid #1d2939;
+    padding: 12px 18px;
+    border-radius: 50px;
+    font-size: 12px;
+}
+
+
+/* STATUS */
+
+.bolinha {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 7px;
+}
+
+.online {
+    background: #39d98a;
+    box-shadow: 0 0 12px #39d98a;
+}
+
+
+/* AGENTES */
+
+.agentes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.agente-card {
+    background: rgba(15, 21, 34, 0.9);
+    border: 1px solid #1d2939;
+    border-radius: 18px;
+    padding: 25px;
+
+    display: flex;
+    gap: 18px;
+
+    transition: 0.25s;
+}
+
+.agente-card:hover {
+    transform: translateY(-3px);
+    border-color: #667eea;
+}
+
+.avatar {
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+    place-items: center;
+
+    background: #151e30;
+    border-radius: 15px;
+
+    font-size: 28px;
+}
+
+.funcao {
+    color: #667eea;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+.agente-card h2 {
+    margin: 4px 0 7px;
+}
+
+.agente-card p {
+    color: #7f899d;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.status {
+    margin-top: 15px;
+    font-size: 12px;
+    color: #aeb6c5;
+}
+
+
+/* PAINEL */
+
+.painel {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 18px;
+}
+
+.comando,
+.infraestrutura,
+.atividade {
+    background: rgba(15, 21, 34, 0.9);
+    border: 1px solid #1d2939;
+    border-radius: 18px;
+    padding: 26px;
+}
+
+.comando h2,
+.infraestrutura h2 {
+    margin: 7px 0 20px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 150px;
+    resize: vertical;
+
+    background: #090e18;
+    color: white;
+
+    border: 1px solid #253148;
+    border-radius: 13px;
+
+    padding: 17px;
+
+    font-family: inherit;
+    font-size: 15px;
+
+    outline: none;
+}
+
+textarea:focus {
+    border-color: #667eea;
+}
+
+.acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+button {
+    border: none;
+    border-radius: 10px;
+
+    padding: 13px 20px;
+
+    background: #667eea;
+    color: white;
+
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+button.secundario {
+    background: #182235;
+}
+
+
+/* MOTORES */
+
+.motor {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid #1d2939;
+
+    font-size: 13px;
+}
+
+.motor strong {
+    color: #39d98a;
+    font-size: 11px;
+}
+
+.memoria {
+    margin-top: 20px;
+
+    padding: 14px;
+
+    background: #0d1c18;
+    color: #39d98a;
+
+    border: 1px solid #173a2e;
+    border-radius: 10px;
+
+    font-size: 13px;
+}
+
+
+/* ATIVIDADE */
+
+.atividade {
+    margin-top: 18px;
+}
+
+#atividade-log {
+    margin-top: 18px;
+}
+
+.atividade-vazia {
+    color: #687386;
+}
+
+.log-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #1d2939;
+
+    color: #b9c1cf;
+    font-size: 13px;
+}
+
+
+/* RESPONSIVO */
+
+@media (max-width: 850px) {
+
+    .agentes,
+    .painel {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
