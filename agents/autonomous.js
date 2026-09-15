@@ -418,7 +418,8 @@ ${objetivo}
 async function executarAgente(
     agente,
     tarefa,
-    numero
+    numero,
+    tarefaParaAutorizacao = tarefa
 ) {
 
     const codigo =
@@ -436,7 +437,7 @@ async function executarAgente(
 
     if (
         tarefaExigeAutorizacao(
-            tarefa
+            tarefaParaAutorizacao
         )
     ) {
 
@@ -772,7 +773,8 @@ async function executarObjetivoAutonomo(
             await executarAgente(
                 plano[i].agente,
                 tarefaComContexto,
-                historico.length + 1
+                historico.length + 1,
+                plano[i].tarefa
             );
 
         historico.push(
@@ -806,7 +808,8 @@ async function executarObjetivoAutonomo(
             await executarAgente(
                 revisao.agente,
                 revisao.tarefa,
-                historico.length + 1
+                historico.length + 1,
+                revisao.tarefa
             );
 
         historico.push(
