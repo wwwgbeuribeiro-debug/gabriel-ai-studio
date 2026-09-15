@@ -302,6 +302,9 @@ async function executarTarefa() {
                 `Resultado: ${resumo.slice(0, 700)}${resumo.length > 700 ? "..." : ""}`
             );
         }
+
+        // Melhoria: Limpar o campo de tarefa após conclusão bem-sucedida
+        campoTarefa.value = "";
     } catch (erro) {
         adicionarLog(
             "Erro de comunicação com o servidor."

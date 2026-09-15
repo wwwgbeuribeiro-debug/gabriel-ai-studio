@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Sistema de agentes de IA",
   "main": "server.js",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "@google/genai": "^2.22.0",
     "dotenv": "^17.4.2",
@@ -10,5 +13,9 @@
     "groq-sdk": "^1.6.0",
     "playwright-core": "^1.63.0",
     "sharp": "^0.35.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jsdom": "^22.1.0"
   }
 }
