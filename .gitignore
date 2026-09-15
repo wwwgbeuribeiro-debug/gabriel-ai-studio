@@ -11,3 +11,11 @@ memory/activity.json
 
 output/videos/
 .video-tmp/
+
+.video-backup/
+.video-tmp/
+output/videos/
+assets/music/background.mp3
+assets/music/background.wav
+assets/music/background.m4a
+assets/music/background.aac

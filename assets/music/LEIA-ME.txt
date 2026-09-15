@@ -1,0 +1,14 @@
+﻿MUSICA PERSONALIZADA DO JAIRO
+
+Se quiser usar sua propria musica depois,
+coloque nesta pasta um arquivo com um destes nomes:
+
+background.mp3
+background.wav
+background.m4a
+background.aac
+
+Se nenhum arquivo existir,
+o Jairo gera uma trilha instrumental original automaticamente.
+
+Use apenas musicas que voce tenha direito de utilizar.
