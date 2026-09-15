@@ -94,3 +94,4 @@ module.exports = {
     listarEventos,
     listarEventosSeguros
 };
+module.exports.emitirEvento = module.exports.emitirRegistro;

@@ -1,0 +1,92 @@
+[
+  {
+    "agente": "Teste",
+    "tipo": "teste",
+    "horario": "2026-09-14T23:47:55.060Z",
+    "mensagem": "evento funcionando"
+  },
+  {
+    "agente": "Carlos",
+    "tipo": "tarefa",
+    "horario": "2026-09-14T23:49:50.094Z",
+    "mensagem": "Recebeu a tarefa: Severino, analise quais agentes existem no projeto. Não altere nenhum arquivo."
+  },
+  {
+    "agente": "Carlos",
+    "tipo": "delegacao",
+    "horario": "2026-09-14T23:49:50.095Z",
+    "mensagem": "Tarefa enviada para Severino"
+  },
+  {
+    "agente": "Severino",
+    "tipo": "inicio",
+    "horario": "2026-09-14T23:49:50.095Z",
+    "mensagem": "Recebeu a tarefa: Severino, analise quais agentes existem no projeto. Não altere nenhum arquivo."
+  },
+  {
+    "agente": "Severino",
+    "tipo": "memoria",
+    "horario": "2026-09-14T23:49:50.100Z",
+    "mensagem": "Memória criada: task-1789429790097"
+  },
+  {
+    "agente": "Severino",
+    "tipo": "investigacao",
+    "horario": "2026-09-14T23:49:50.105Z",
+    "mensagem": "Mapeando o projeto..."
+  },
+  {
+    "agente": "Severino",
+    "tipo": "analise",
+    "horario": "2026-09-14T23:49:50.106Z",
+    "mensagem": "Escolhendo arquivos para investigar..."
+  },
+  {
+    "agente": "Severino",
+    "tipo": "arquivo",
+    "horario": "2026-09-14T23:49:57.326Z",
+    "mensagem": "Lendo agents\\content.js"
+  },
+  {
+    "agente": "Severino",
+    "tipo": "arquivo",
+    "horario": "2026-09-14T23:49:57.326Z",
+    "mensagem": "Lendo agents\\coordinator.js"
+  },
+  {
+    "agente": "Severino",
+    "tipo": "arquivo",
+    "horario": "2026-09-14T23:49:57.326Z",
+    "mensagem": "Lendo agents\\developer.js"
+  },
+  {
+    "agente": "Severino",
+    "tipo": "arquivo",
+    "horario": "2026-09-14T23:49:57.326Z",
+    "mensagem": "Lendo server.js"
+  },
+  {
+    "agente": "Severino",
+    "tipo": "analise",
+    "horario": "2026-09-14T23:49:57.332Z",
+    "mensagem": "Modo somente leitura: nenhum arquivo será alterado."
+  },
+  {
+    "agente": "Severino",
+    "tipo": "ia",
+    "horario": "2026-09-14T23:49:57.333Z",
+    "mensagem": "Gerando análise final..."
+  },
+  {
+    "agente": "Severino",
+    "tipo": "concluido",
+    "horario": "2026-09-14T23:50:23.585Z",
+    "mensagem": "Análise concluída."
+  },
+  {
+    "agente": "Carlos",
+    "tipo": "concluido",
+    "horario": "2026-09-14T23:50:23.586Z",
+    "mensagem": "Tarefa concluída por Severino."
+  }
+]
