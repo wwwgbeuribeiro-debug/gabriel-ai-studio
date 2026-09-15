@@ -1,4 +1,4 @@
-const { usarIA } = require("../tools/ai");
+﻿const { usarIA } = require("../tools/ai");
 
 const {
     listarProjeto,
@@ -42,25 +42,25 @@ function tarefaPedeDesfazer(tarefa) {
         .toLowerCase()
         .trim();
 
-    // Remove apenas a chamada ao agente no início.
-    // Ex.: "Severino, desfaça..." -> "desfaça..."
+    // Remove apenas a chamada ao agente no inÃ­cio.
+    // Ex.: "Severino, desfaÃ§a..." -> "desfaÃ§a..."
     texto = texto.replace(
         /^severino\s*[,;:\-]?\s*/,
         ""
     );
 
-    // Permite começar educadamente sem mudar a intenção.
+    // Permite comeÃ§ar educadamente sem mudar a intenÃ§Ã£o.
     texto = texto.replace(
         /^por favor\s*[,;:\-]?\s*/,
         ""
     );
 
     const comandosDeDesfazer = [
-        /^(desfaça|desfaca|desfazer|reverta|reverter)\b/,
+        /^(desfaÃ§a|desfaca|desfazer|reverta|reverter)\b/,
         /^(rollback|undo)(?:\s|$)/,
-        /^(quero|preciso|pode|poderia|gostaria de)\s+(?:que\s+você\s+)?(desfaça|desfaca|desfazer|reverta|reverter)\b/,
-        /^volte\s+(?:à|a)\s+(?:última|ultima)\s+(?:alteração|alteracao|mudança|mudanca)\b/,
-        /^restaure\s+(?:a\s+)?(?:última|ultima)\s+(?:alteração|alteracao|mudança|mudanca)\b/
+        /^(quero|preciso|pode|poderia|gostaria de)\s+(?:que\s+vocÃª\s+)?(desfaÃ§a|desfaca|desfazer|reverta|reverter)\b/,
+        /^volte\s+(?:Ã |a)\s+(?:Ãºltima|ultima)\s+(?:alteraÃ§Ã£o|alteracao|mudanÃ§a|mudanca)\b/,
+        /^restaure\s+(?:a\s+)?(?:Ãºltima|ultima)\s+(?:alteraÃ§Ã£o|alteracao|mudanÃ§a|mudanca)\b/
     ];
 
     return comandosDeDesfazer.some(
@@ -122,15 +122,15 @@ function tarefaSomenteLeitura(tarefa) {
 
     const padroes = [
 
-        /\bnão\s+(?:altere|modifique|edite|mude|crie|remova|apague|escreva|salve)\b/,
+        /\bnÃ£o\s+(?:altere|modifique|edite|mude|crie|remova|apague|escreva|salve)\b/,
 
         /\bnao\s+(?:altere|modifique|edite|mude|crie|remova|apague|escreva|salve)\b/,
 
         /\bsem\s+(?:alterar|modificar|editar|mudar|criar|remover|apagar|escrever|salvar)\b/,
 
-        /\bsomente\s+(?:analise|análise|investigue|explique|liste|diga|verifique|revise)\b/,
+        /\bsomente\s+(?:analise|anÃ¡lise|investigue|explique|liste|diga|verifique|revise)\b/,
 
-        /\bapenas\s+(?:analise|análise|investigue|explique|liste|diga|verifique|revise)\b/,
+        /\bapenas\s+(?:analise|anÃ¡lise|investigue|explique|liste|diga|verifique|revise)\b/,
 
         /\bmodo\s+(?:somente\s+leitura|leitura|read[- ]?only)\b/
 
@@ -160,7 +160,7 @@ function detectarCriacaoArquivoSimples(tarefa) {
     const texto = removerChamadaDoAgente(tarefa);
 
     const encontrado = texto.match(
-        /^(?:crie|criar)\s+(?:um\s+)?arquivo\s+["'`]?([^\s"'`]+)["'`]?\s+com\s+(?:a\s+)?(?:frase|texto|conteúdo|conteudo)\s+([\s\S]+)$/i
+        /^(?:crie|criar)\s+(?:um\s+)?arquivo\s+["'`]?([^\s"'`]+)["'`]?\s+com\s+(?:a\s+)?(?:frase|texto|conteÃºdo|conteudo)\s+([\s\S]+)$/i
     );
 
     if (!encontrado) {
@@ -239,7 +239,7 @@ function extrairMudancasDaProposta(proposta) {
 
 function limparLinhaArquivo(linha) {
     return linha
-        .replace(/^[-*•\d.)\s]+/, "")
+        .replace(/^[-*â€¢\d.)\s]+/, "")
         .replace(/^ARQUIVO:\s*/i, "")
         .replace(/`/g, "")
         .trim();
@@ -256,7 +256,7 @@ function extrairJSON(texto) {
 
     if (inicio === -1 || fim === -1) {
         throw new Error(
-            "A IA não devolveu um JSON válido."
+            "A IA nÃ£o devolveu um JSON vÃ¡lido."
         );
     }
 
@@ -272,14 +272,14 @@ async function pedirJSON(prompt) {
         return extrairJSON(resposta);
     } catch {
         resposta = await usarIA(`
-A resposta abaixo deveria ser JSON puro e válido,
+A resposta abaixo deveria ser JSON puro e vÃ¡lido,
 mas veio em formato incorreto.
 
 CORRIJA SOMENTE O FORMATO.
-Não mude a intenção da resposta.
-Não use markdown.
-Não use blocos de código.
-Responda somente com um objeto JSON válido.
+NÃ£o mude a intenÃ§Ã£o da resposta.
+NÃ£o use markdown.
+NÃ£o use blocos de cÃ³digo.
+Responda somente com um objeto JSON vÃ¡lido.
 
 RESPOSTA ORIGINAL:
 ${resposta}
@@ -336,7 +336,7 @@ async function escolherArquivos(
     estrutura
 ) {
     const resposta = await usarIA(`
-Você é Severino, desenvolvedor do Gabriel AI Studio.
+VocÃª Ã© Severino, desenvolvedor do Gabriel AI Studio.
 
 Escolha somente os arquivos existentes que precisa ler
 para entender a tarefa abaixo.
@@ -344,15 +344,15 @@ para entender a tarefa abaixo.
 TAREFA:
 ${tarefa}
 
-ARQUIVOS DISPONÍVEIS:
+ARQUIVOS DISPONÃVEIS:
 ${estrutura.join("\n")}
 
 REGRAS:
-- Escolha no máximo ${MAX_ARQUIVOS_CONTEXTO} arquivos.
-- Não escolha .env, chaves, credenciais ou node_modules.
-- Não invente caminhos.
+- Escolha no mÃ¡ximo ${MAX_ARQUIVOS_CONTEXTO} arquivos.
+- NÃ£o escolha .env, chaves, credenciais ou node_modules.
+- NÃ£o invente caminhos.
 - Responda somente com um caminho por linha.
-- Sem explicações.
+- Sem explicaÃ§Ãµes.
 `);
 
     const escolhidos = resposta
@@ -383,19 +383,19 @@ REGRAS:
 function validarMudancas(mudancas) {
     if (!Array.isArray(mudancas)) {
         throw new Error(
-            "A IA não forneceu uma lista de alterações."
+            "A IA nÃ£o forneceu uma lista de alteraÃ§Ãµes."
         );
     }
 
     if (mudancas.length === 0) {
         throw new Error(
-            "Nenhuma alteração foi proposta."
+            "Nenhuma alteraÃ§Ã£o foi proposta."
         );
     }
 
     if (mudancas.length > 12) {
         throw new Error(
-            "A alteração tentou modificar arquivos demais de uma vez."
+            "A alteraÃ§Ã£o tentou modificar arquivos demais de uma vez."
         );
     }
 
@@ -406,7 +406,7 @@ function validarMudancas(mudancas) {
             typeof item.content !== "string"
         ) {
             throw new Error(
-                "Formato de alteração inválido."
+                "Formato de alteraÃ§Ã£o invÃ¡lido."
             );
         }
 
@@ -429,7 +429,7 @@ function formatarTestes(teste) {
 }
 
 async function developer(tarefa) {
-    console.log("💻 Severino recebeu a tarefa:");
+    console.log("ðŸ’» Severino recebeu a tarefa:");
     console.log(tarefa);
 
     emitirEvento(
@@ -446,7 +446,7 @@ async function developer(tarefa) {
     emitirEvento(
         "Severino",
         "memoria",
-        `Memória criada: ${tarefaMemoria.id}`
+        `MemÃ³ria criada: ${tarefaMemoria.id}`
     );
 
 
@@ -462,7 +462,7 @@ async function developer(tarefa) {
 
         definirProximoPasso(
             tarefaMemoria.id,
-            "Localizar a alteração registrada no Git e criar uma reversão segura."
+            "Localizar a alteraÃ§Ã£o registrada no Git e criar uma reversÃ£o segura."
         );
 
         try {
@@ -473,8 +473,8 @@ async function developer(tarefa) {
                 "Severino",
                 "rollback",
                 idAlvo
-                    ? `Localizando a alteração ${idAlvo}...`
-                    : "Localizando a última alteração concluída..."
+                    ? `Localizando a alteraÃ§Ã£o ${idAlvo}...`
+                    : "Localizando a Ãºltima alteraÃ§Ã£o concluÃ­da..."
             );
 
             const desfeita =
@@ -494,7 +494,7 @@ async function developer(tarefa) {
 
             adicionarProgresso(
                 tarefaMemoria.id,
-                `Alteração ${desfeita.idTarefa} desfeita. Arquivos: ${desfeita.arquivos.join(", ")}`
+                `AlteraÃ§Ã£o ${desfeita.idTarefa} desfeita. Arquivos: ${desfeita.arquivos.join(", ")}`
             );
 
             atualizarStatus(
@@ -510,15 +510,15 @@ async function developer(tarefa) {
             emitirEvento(
                 "Severino",
                 "concluido",
-                `Alteração ${desfeita.idTarefa} desfeita com sucesso.`
+                `AlteraÃ§Ã£o ${desfeita.idTarefa} desfeita com sucesso.`
             );
 
             return [
-                `Alteração desfeita: ${desfeita.idTarefa}`,
+                `AlteraÃ§Ã£o desfeita: ${desfeita.idTarefa}`,
                 `Arquivos restaurados/removidos: ${desfeita.arquivos.join(", ")}`,
                 teste.resultados.length > 0
-                    ? `Validação: ${formatarTestes(teste)}`
-                    : "Validação: não havia arquivos restantes que precisassem ser testados."
+                    ? `ValidaÃ§Ã£o: ${formatarTestes(teste)}`
+                    : "ValidaÃ§Ã£o: nÃ£o havia arquivos restantes que precisassem ser testados."
             ].join("\n");
         } catch (erro) {
             atualizarStatus(
@@ -528,7 +528,7 @@ async function developer(tarefa) {
 
             definirProximoPasso(
                 tarefaMemoria.id,
-                "Revisar o histórico de alterações antes de tentar novamente."
+                "Revisar o histÃ³rico de alteraÃ§Ãµes antes de tentar novamente."
             );
 
             emitirEvento(
@@ -542,7 +542,7 @@ async function developer(tarefa) {
     }
 
     // ========================================
-    // TAREFAS SIMPLES E DETERMINÍSTICAS
+    // TAREFAS SIMPLES E DETERMINÃSTICAS
     // ========================================
 
     const somenteLeitura =
@@ -605,7 +605,7 @@ async function developer(tarefa) {
                 restaurarBackup(backup);
 
                 throw new Error(
-                    `A validação falhou. O checkpoint Git foi restaurado. ${formatarTestes(teste)}`
+                    `A validaÃ§Ã£o falhou. O checkpoint Git foi restaurado. ${formatarTestes(teste)}`
                 );
             }
 
@@ -618,7 +618,7 @@ async function developer(tarefa) {
 
             adicionarProgresso(
                 tarefaMemoria.id,
-                `Arquivo ${caminhoSeguro} criado e registrado no histórico.`
+                `Arquivo ${caminhoSeguro} criado e registrado no histÃ³rico.`
             );
 
             atualizarStatus(
@@ -639,8 +639,8 @@ async function developer(tarefa) {
 
             return [
                 `Arquivo criado: ${caminhoSeguro}`,
-                `Validação: ${formatarTestes(teste)}`,
-                `Para desfazer: Severino, desfaça a última alteração.`
+                `ValidaÃ§Ã£o: ${formatarTestes(teste)}`,
+                `Para desfazer: Severino, desfaÃ§a a Ãºltima alteraÃ§Ã£o.`
             ].join("\n");
         } catch (erro) {
             try {
@@ -666,7 +666,7 @@ async function developer(tarefa) {
 
     adicionarProgresso(
         tarefaMemoria.id,
-        "Severino iniciou a investigação."
+        "Severino iniciou a investigaÃ§Ã£o."
     );
 
     atualizarStatus(
@@ -676,7 +676,7 @@ async function developer(tarefa) {
 
     definirProximoPasso(
         tarefaMemoria.id,
-        "Mapear o projeto e escolher os arquivos necessários."
+        "Mapear o projeto e escolher os arquivos necessÃ¡rios."
     );
 
     emitirEvento(
@@ -728,13 +728,13 @@ async function developer(tarefa) {
 
         adicionarProgresso(
             tarefaMemoria.id,
-            "Modo somente leitura confirmado. Nenhum arquivo será alterado."
+            "Modo somente leitura confirmado. Nenhum arquivo serÃ¡ alterado."
         );
 
         emitirEvento(
             "Severino",
             "analise",
-            "Modo somente leitura: nenhum arquivo será alterado."
+            "Modo somente leitura: nenhum arquivo serÃ¡ alterado."
         );
     }
 
@@ -747,11 +747,11 @@ async function developer(tarefa) {
         emitirEvento(
             "Severino",
             "ia",
-            "Gerando análise final..."
+            "Gerando anÃ¡lise final..."
         );
 
         const resultado = await usarIA(`
-Você é Severino, desenvolvedor do Gabriel AI Studio.
+VocÃª Ã© Severino, desenvolvedor do Gabriel AI Studio.
 
 Analise a tarefa usando somente os arquivos reais abaixo.
 
@@ -762,15 +762,15 @@ ARQUIVOS ANALISADOS:
 ${contexto}
 
 REGRAS:
-- Não invente arquivos ou funcionalidades.
-- Diferencie fatos observados de sugestões.
+- NÃ£o invente arquivos ou funcionalidades.
+- Diferencie fatos observados de sugestÃµes.
 - Seja claro e objetivo.
-- Se faltar informação, diga exatamente o que falta.
+- Se faltar informaÃ§Ã£o, diga exatamente o que falta.
 `);
 
         adicionarProgresso(
             tarefaMemoria.id,
-            "Análise concluída."
+            "AnÃ¡lise concluÃ­da."
         );
 
         atualizarStatus(
@@ -786,14 +786,14 @@ REGRAS:
         emitirEvento(
             "Severino",
             "concluido",
-            "Análise concluída."
+            "AnÃ¡lise concluÃ­da."
         );
 
         return resultado;
     }
 
     // ========================================
-    // MODO AUTÔNOMO DE ALTERAÇÃO
+    // MODO AUTÃ”NOMO DE ALTERAÃ‡ÃƒO
     // ========================================
 
     atualizarStatus(
@@ -803,18 +803,18 @@ REGRAS:
 
     definirProximoPasso(
         tarefaMemoria.id,
-        "Criar um plano seguro de alteração."
+        "Criar um plano seguro de alteraÃ§Ã£o."
     );
 
     emitirEvento(
         "Severino",
         "plano",
-        "Criando plano de implementação..."
+        "Criando plano de implementaÃ§Ã£o..."
     );
 
     const plano = await pedirJSON(`
-Você é Severino, desenvolvedor responsável por alterar
-com segurança o Gabriel AI Studio.
+VocÃª Ã© Severino, desenvolvedor responsÃ¡vel por alterar
+com seguranÃ§a o Gabriel AI Studio.
 
 TAREFA:
 ${tarefa}
@@ -826,19 +826,19 @@ ESTRUTURA DO PROJETO:
 ${estrutura.join("\n")}
 
 Crie um plano pequeno e objetivo.
-Não faça alterações ainda.
+NÃ£o faÃ§a alteraÃ§Ãµes ainda.
 
-Responda SOMENTE com JSON válido neste formato:
+Responda SOMENTE com JSON vÃ¡lido neste formato:
 {
-  "resumo": "o que será feito",
+  "resumo": "o que serÃ¡ feito",
   "arquivos": ["arquivo1.js", "arquivo2.js"],
   "passos": ["passo 1", "passo 2"]
 }
 
 REGRAS:
-- Não use .env, credenciais, chaves ou node_modules.
-- Prefira poucas alterações de cada vez.
-- Não invente funcionalidades fora da tarefa.
+- NÃ£o use .env, credenciais, chaves ou node_modules.
+- Prefira poucas alteraÃ§Ãµes de cada vez.
+- NÃ£o invente funcionalidades fora da tarefa.
 `);
 
     adicionarProgresso(
@@ -849,11 +849,11 @@ REGRAS:
     emitirEvento(
         "Severino",
         "edicao",
-        "Preparando alterações no código..."
+        "Preparando alteraÃ§Ãµes no cÃ³digo..."
     );
 
     const proposta = await pedirJSON(`
-Você é Severino, desenvolvedor do Gabriel AI Studio.
+VocÃª Ã© Severino, desenvolvedor do Gabriel AI Studio.
 
 Implemente a tarefa abaixo.
 
@@ -863,31 +863,31 @@ ${tarefa}
 PLANO:
 ${JSON.stringify(plano, null, 2)}
 
-ARQUIVOS REAIS DISPONÍVEIS:
+ARQUIVOS REAIS DISPONÃVEIS:
 ${contexto}
 
 ESTRUTURA DO PROJETO:
 ${estrutura.join("\n")}
 
-Responda SOMENTE com JSON válido no formato:
+Responda SOMENTE com JSON vÃ¡lido no formato:
 {
-  "resumo": "resumo da implementação",
+  "resumo": "resumo da implementaÃ§Ã£o",
   "changes": [
     {
       "path": "caminho/do/arquivo.js",
-      "content": "CONTEÚDO COMPLETO DO ARQUIVO"
+      "content": "CONTEÃšDO COMPLETO DO ARQUIVO"
     }
   ]
 }
 
-REGRAS OBRIGATÓRIAS:
-- Cada content deve conter o arquivo COMPLETO, não um patch.
-- Pode criar arquivos novos quando necessário.
-- Não altere .env, credenciais, chaves, .git ou node_modules.
-- Preserve funcionalidades existentes que não fazem parte da tarefa.
-- Use somente Node.js e dependências já existentes, a menos que seja impossível.
-- Não execute comandos.
-- Não inclua markdown fora do JSON.
+REGRAS OBRIGATÃ“RIAS:
+- Cada content deve conter o arquivo COMPLETO, nÃ£o um patch.
+- Pode criar arquivos novos quando necessÃ¡rio.
+- NÃ£o altere .env, credenciais, chaves, .git ou node_modules.
+- Preserve funcionalidades existentes que nÃ£o fazem parte da tarefa.
+- Use somente Node.js e dependÃªncias jÃ¡ existentes, a menos que seja impossÃ­vel.
+- NÃ£o execute comandos.
+- NÃ£o inclua markdown fora do JSON.
 `);
 
     let mudancas =
@@ -912,7 +912,7 @@ REGRAS OBRIGATÓRIAS:
 
     adicionarProgresso(
         tarefaMemoria.id,
-        `Checkpoint Git antes das alterações: ${backup.commit}`
+        `Checkpoint Git antes das alteraÃ§Ãµes: ${backup.commit}`
     );
 
     try {
@@ -944,7 +944,7 @@ REGRAS OBRIGATÓRIAS:
             emitirEvento(
                 "Severino",
                 "teste",
-                `Executando validação ${tentativa}/${MAX_TENTATIVAS_CORRECAO}...`
+                `Executando validaÃ§Ã£o ${tentativa}/${MAX_TENTATIVAS_CORRECAO}...`
             );
 
             teste = await testarAlteracoes(
@@ -979,8 +979,8 @@ REGRAS OBRIGATÓRIAS:
                 );
 
             const correcao = await pedirJSON(`
-Você é Severino corrigindo uma implementação que falhou
-na validação local.
+VocÃª Ã© Severino corrigindo uma implementaÃ§Ã£o que falhou
+na validaÃ§Ã£o local.
 
 TAREFA ORIGINAL:
 ${tarefa}
@@ -991,22 +991,22 @@ ${formatarTestes(teste)}
 ARQUIVOS ATUAIS:
 ${contextoAtual}
 
-Responda SOMENTE com JSON válido:
+Responda SOMENTE com JSON vÃ¡lido:
 {
   "resumo": "o que foi corrigido",
   "changes": [
     {
       "path": "arquivo.js",
-      "content": "CONTEÚDO COMPLETO CORRIGIDO"
+      "content": "CONTEÃšDO COMPLETO CORRIGIDO"
     }
   ]
 }
 
 REGRAS:
-- Corrija somente o necessário.
-- Não toque em .env, credenciais ou node_modules.
+- Corrija somente o necessÃ¡rio.
+- NÃ£o toque em .env, credenciais ou node_modules.
 - content deve ser o arquivo completo.
-- Não use markdown fora do JSON.
+- NÃ£o use markdown fora do JSON.
 `);
 
             const correcoes =
@@ -1021,7 +1021,7 @@ REGRAS:
                     )
                 ) {
                     throw new Error(
-                        `A correção tentou alterar um novo arquivo fora do backup: ${mudanca.path}`
+                        `A correÃ§Ã£o tentou alterar um novo arquivo fora do backup: ${mudanca.path}`
                     );
                 }
 
@@ -1044,7 +1044,7 @@ REGRAS:
             emitirEvento(
                 "Severino",
                 "rollback",
-                "Validação falhou. Restaurando o checkpoint Git..."
+                "ValidaÃ§Ã£o falhou. Restaurando o checkpoint Git..."
             );
 
             restaurarBackup(backup);
@@ -1060,7 +1060,7 @@ REGRAS:
             );
 
             throw new Error(
-                `Não consegui validar a alteração após ${MAX_TENTATIVAS_CORRECAO} tentativas. O checkpoint Git foi restaurado.`
+                `NÃ£o consegui validar a alteraÃ§Ã£o apÃ³s ${MAX_TENTATIVAS_CORRECAO} tentativas. O checkpoint Git foi restaurado.`
             );
         }
 
@@ -1074,7 +1074,7 @@ REGRAS:
 
         adicionarProgresso(
             tarefaMemoria.id,
-            `Alterações validadas e registradas para possível desfazer: ${arquivosAlterados.join(", ")}`
+            `AlteraÃ§Ãµes validadas e registradas para possÃ­vel desfazer: ${arquivosAlterados.join(", ")}`
         );
 
         atualizarStatus(
@@ -1090,29 +1090,29 @@ REGRAS:
         emitirEvento(
             "Severino",
             "concluido",
-            "Implementação concluída e validada."
+            "ImplementaÃ§Ã£o concluÃ­da e validada."
         );
 
         const precisaReiniciar =
             arquivosAlterados.some(arquivo =>
                 arquivo === "server.js" ||
-                arquivo.startsWith("agents/") ||
-                arquivo.startsWith("tools/")
+                arquivo.replace(/\\/g, "/").startsWith("agents/") ||
+                arquivo.replace(/\\/g, "/").startsWith("tools/")
             );
 
         return [
             proposta.resumo ||
-                "Implementação concluída.",
+                "ImplementaÃ§Ã£o concluÃ­da.",
             "",
             `Arquivos alterados: ${arquivosAlterados.join(", ")}`,
             `Testes: ${formatarTestes(teste)}`,
             precisaReiniciar
-                ? "Reinício do servidor recomendado para carregar alterações de backend."
-                : "As alterações já podem ser usadas sem reiniciar o backend."
+                ? "ReinÃ­cio do servidor recomendado para carregar alteraÃ§Ãµes de backend."
+                : "As alteraÃ§Ãµes jÃ¡ podem ser usadas sem reiniciar o backend."
         ].join("\n");
 
     } catch (erro) {
-        // Se o erro ocorreu antes de um rollback explícito,
+        // Se o erro ocorreu antes de um rollback explÃ­cito,
         // tentamos voltar ao estado original.
         try {
             restaurarBackup(backup);
@@ -1136,3 +1136,4 @@ REGRAS:
 }
 
 module.exports = developer;
+
