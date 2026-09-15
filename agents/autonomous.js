@@ -214,6 +214,57 @@ function resumirResultado(
 }
 
 
+
+function montarTarefaComContexto(
+    objetivo,
+    etapa,
+    historico
+) {
+
+    if (
+        !Array.isArray(historico) ||
+        historico.length === 0
+    ) {
+
+        return etapa.tarefa;
+    }
+
+
+    const anteriores =
+        historico
+            .slice(-2)
+            .map(
+                item =>
+                    `ETAPA ${item.numero} - ${item.nome}
+TAREFA EXECUTADA:
+${item.tarefa}
+
+RESULTADO REAL:
+${item.resultado}`
+            )
+            .join("\n\n");
+
+
+    return `
+OBJETIVO GERAL:
+${objetivo}
+
+SUA ETAPA AGORA:
+${etapa.tarefa}
+
+CONTEXTO REAL DAS ETAPAS ANTERIORES:
+${anteriores}
+
+REGRAS:
+- Continue a partir dos resultados acima.
+- Nao repita trabalho ja concluido.
+- Nao invente resultados anteriores.
+- Use os arquivos, decisoes e conclusoes encontrados anteriormente.
+- Se o contexto mostrar que a etapa ja foi resolvida, valide o resultado em vez de refazer tudo.
+`.trim();
+}
+
+
 async function criarPlano(objetivo) {
 
     console.log(
@@ -709,10 +760,18 @@ async function executarObjetivoAutonomo(
         i++
     ) {
 
+        const tarefaComContexto =
+            montarTarefaComContexto(
+                objetivo,
+                plano[i],
+                historico
+            );
+
+
         const resultado =
             await executarAgente(
                 plano[i].agente,
-                plano[i].tarefa,
+                tarefaComContexto,
                 historico.length + 1
             );
 
