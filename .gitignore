@@ -8,3 +8,6 @@ gabriel-ai-studio-upgrade*/
 gabriel-ai-studio-hotfix*/
 gabriel-ai-studio-git-upgrade*/
 memory/activity.json
+
+output/videos/
+.video-tmp/
