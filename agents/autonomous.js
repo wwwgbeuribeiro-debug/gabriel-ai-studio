@@ -32,9 +32,17 @@ function deveExecutarAutonomo(tarefa) {
         /\bcontinue ate\b/.test(texto) ||
         /\btrabalhe ate\b/.test(texto);
 
+    const novaMissao =
+        /\bmissao completa\b/.test(texto) ||
+        /\bexecute uma missao\b/.test(texto) ||
+        /\bsequencia de trabalho\b/.test(texto) ||
+        /\bsequencia de agentes\b/.test(texto) ||
+        /\bsequencia de trabalho entre mais de um agente\b/.test(texto) ||
+        /\bsequencia de trabalho com varios agentes\b/.test(texto);
+
     return (
         chamouCarlos &&
-        pediuAutonomia
+        (pediuAutonomia || novaMissao)
     );
 }
 
@@ -90,11 +98,11 @@ function extrairJSON(resposta) {
     texto =
         texto
             .replace(
-                /^```(?:json)?\s*/i,
+                /^(?:json)?\s*/i,
                 ""
             )
             .replace(
-                /```\s*$/i,
+                /\s*$/i,
                 ""
             )
             .trim();
@@ -582,11 +590,10 @@ ${resumo}
                 status:
                     "CONCLUIDO",
 
-                motivo:
-                    String(
-                        dados.motivo ||
-                        "Objetivo atendido."
-                    )
+                motivo: String(
+                    dados.motivo ||
+                    "Objetivo atendido."
+                )
             };
         }
 
@@ -619,11 +626,10 @@ ${resumo}
                     )
                         .trim(),
 
-                motivo:
-                    String(
-                        dados.motivo || ""
-                    )
-                        .trim()
+                motivo: String(
+                    dados.motivo || ""
+                )
+                    .trim()
             };
         }
 
