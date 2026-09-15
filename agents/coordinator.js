@@ -84,6 +84,7 @@ function decidirLocalmente(tarefa) {
     return null;
 }
 
+
 async function coordinator(tarefa) {
     console.log("🧠 Carlos recebeu:");
     console.log(tarefa);
@@ -150,7 +151,7 @@ Você é Carlos, o coordenador de uma equipe de agentes.
 
 Sua função é escolher qual agente deve executar a tarefa.
 
-AGENTES DISPONÍVEIS:
+AGENTES DISPONIVEIS:
 
 DEV
 Nome: Severino
@@ -203,8 +204,20 @@ ${tarefa}
             );
         }
 
+        // Normalizar resultado: extrair texto se for objeto estruturado
+        let resultadoFinal;
+        if (
+            typeof resultado === "object" &&
+            resultado !== null &&
+            resultado.resultado
+        ) {
+            resultadoFinal = resultado.resultado;
+        } else {
+            resultadoFinal = resultado;
+        }
+
         console.log("\n✅ RESULTADO FINAL:\n");
-        console.log(resultado);
+        console.log(resultadoFinal);
 
         emitirEvento(
             "Carlos",
@@ -212,7 +225,7 @@ ${tarefa}
             `Tarefa concluída por ${nomes[agenteEscolhido]}.`
         );
 
-        return resultado;
+        return resultadoFinal;
 
     } catch (erro) {
         console.log("\n❌ Ocorreu um erro:");
@@ -227,5 +240,6 @@ ${tarefa}
         throw erro;
     }
 }
+
 
 module.exports = coordinator;

@@ -55,7 +55,7 @@ function limparObjetivo(tarefa) {
             ""
         )
         .replace(
-            /^objetivo\s*[:\-]?\s*/i,
+            /^objetivo\s*[:;\-]?\s*/i,
             ""
         )
         .trim();
@@ -183,7 +183,7 @@ function escolherFallback(objetivo) {
         palavrasConteudo.some(
             palavra =>
                 texto.includes(palavra)
-        );
+    );
 
     return ehConteudo
         ? "CONTENT"
@@ -222,7 +222,6 @@ function resumirResultado(
 }
 
 
-
 function montarTarefaComContexto(
     objetivo,
     etapa,
@@ -248,7 +247,13 @@ TAREFA EXECUTADA:
 ${item.tarefa}
 
 RESULTADO REAL:
-${item.resultado}`
+${item.resultado}
+
+ARQUIVOS ALTERADOS:
+${item.arquivosAlterados ? item.arquivosAlterados.join(", ") : "Nenhum"}
+
+ID DA TAREFA:
+${item.idTarefa || "N/A"}`
             )
             .join("\n\n");
 
@@ -488,22 +493,48 @@ async function executarAgente(
             );
     }
 
+    // Normalizar resultado para objeto estruturado
+    let resultadoNormalizado;
+    if (
+        typeof resultado === "object" &&
+        resultado !== null
+    ) {
+        resultadoNormalizado = {
+            numero,
+            agente: codigo,
+            nome,
+            tarefa,
+            resultado: resumirResultado(
+                resultado.resultado
+            ),
+            arquivosAlterados: Array.isArray(
+                resultado.arquivosAlterados
+            )
+                ? resultado.arquivosAlterados
+                : [],
+            idTarefa: resultado.idTarefa || null
+        };
+    } else {
+        resultadoNormalizado = {
+            numero,
+            agente: codigo,
+            nome,
+            tarefa,
+            resultado: resumirResultado(
+                resultado
+            ),
+            arquivosAlterados: [],
+            idTarefa: null
+        };
+    }
+
     emitirEvento(
         "Carlos",
         "autonomia",
         `Etapa ${numero} concluida por ${nome}.`
     );
 
-    return {
-        numero,
-        agente: codigo,
-        nome,
-        tarefa,
-        resultado:
-            resumirResultado(
-                resultado
-            )
-    };
+    return resultadoNormalizado;
 }
 
 
@@ -518,7 +549,9 @@ async function revisarObjetivo(
                 item =>
                     `ETAPA ${item.numero} - ${item.nome}
 TAREFA: ${item.tarefa}
-RESULTADO: ${item.resultado}`
+RESULTADO: ${item.resultado}
+ARQUIVOS: ${item.arquivosAlterados ? item.arquivosAlterados.join(", ") : "Nenhum"}
+ID: ${item.idTarefa || "N/A"}`
             )
             .join("\n\n");
 
@@ -690,6 +723,20 @@ function montarResultadoFinal(
         linhas.push(
             `Resultado: ${item.resultado}`
         );
+
+        if (item.arquivosAlterados && item.arquivosAlterados.length > 0) {
+
+            linhas.push(
+                `Arquivos alterados: ${item.arquivosAlterados.join(", ")}`
+            );
+        }
+
+        if (item.idTarefa) {
+
+            linhas.push(
+                `ID da tarefa: ${item.idTarefa}`
+            );
+        }
     }
 
     linhas.push("");
@@ -818,9 +865,7 @@ async function executarObjetivoAutonomo(
                 revisao.tarefa
             );
 
-        historico.push(
-            extra
-        );
+        historico.push(extra);
 
         revisao = {
             status:
@@ -831,17 +876,20 @@ async function executarObjetivoAutonomo(
         };
     }
 
+    const resultadoFinal =
+        montarResultadoFinal(
+            objetivo,
+            historico,
+            revisao
+        );
+
     emitirEvento(
         "Carlos",
         "autonomia",
-        `Objetivo autonomo encerrado apos ${historico.length} etapa(s).`
+        `Objetivo autônomo finalizado.`
     );
 
-    return montarResultadoFinal(
-        objetivo,
-        historico,
-        revisao
-    );
+    return resultadoFinal;
 }
 
 
