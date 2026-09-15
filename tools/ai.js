@@ -12,10 +12,22 @@ const {
     cloudflareDisponivel
 } = require("./providers/cloudflare");
 
-
 const FORCAR_GROQ =
     false;
 
+// Mapa de cooldowns em memória: { [nomeProvedor]: timestampExpiracao }
+const cooldowns = {};
+
+function setCooldown(nome) {
+    // 10 minutos em milissegundos
+    cooldowns[nome] = Date.now() + 10 * 60 * 1000;
+    console.log(`🔴 ${nome} atingiu limite. Cooldown iniciado por 10 minutos.`);
+}
+
+function isInCooldown(nome) {
+    const expiracao = cooldowns[nome];
+    return expiracao && Date.now() < expiracao;
+}
 
 function esperar(ms) {
 
@@ -28,14 +40,12 @@ function esperar(ms) {
     );
 }
 
-
 function chaveConfigurada(nome) {
 
     return Boolean(
         process.env[nome]
     );
 }
-
 
 function erroCurto(erro) {
 
@@ -48,11 +58,9 @@ function erroCurto(erro) {
         erro.status ||
         erro.statusCode;
 
-
     if (status) {
         return `HTTP ${status}`;
     }
-
 
     return String(
         erro.message ||
@@ -67,7 +75,6 @@ function erroCurto(erro) {
             120
         );
 }
-
 
 async function usarGemini(prompt) {
 
@@ -90,7 +97,6 @@ async function usarGemini(prompt) {
                     .GEMINI_API_KEY
         });
 
-
     const resposta =
         await gemini.models
             .generateContent({
@@ -101,10 +107,8 @@ async function usarGemini(prompt) {
                     prompt
             });
 
-
     const texto =
         resposta?.text;
-
 
     if (
         !texto ||
@@ -116,12 +120,10 @@ async function usarGemini(prompt) {
         );
     }
 
-
     return String(
         texto
     ).trim();
 }
-
 
 async function usarGroqLazy(prompt) {
 
@@ -141,12 +143,10 @@ async function usarGroqLazy(prompt) {
         usarGroq
     } = require("./providers/groq");
 
-
     return usarGroq(
         prompt
     );
 }
-
 
 async function usarOpenRouterLazy(
     prompt
@@ -163,25 +163,30 @@ async function usarOpenRouterLazy(
         );
     }
 
-
     const {
         usarOpenRouter
     } = require(
         "./providers/openrouter"
     );
 
-
     return usarOpenRouter(
         prompt
     );
 }
-
 
 async function tentarProvider({
     nome,
     disponivel,
     executar
 }) {
+
+    if (isInCooldown(nome)) {
+        console.log(`⚪ ${nome} em cooldown. Pulando...`);
+        return {
+            sucesso: false,
+            pulado: true
+        };
+    }
 
     if (!disponivel()) {
 
@@ -190,11 +195,8 @@ async function tentarProvider({
         );
 
         return {
-            sucesso:
-                false,
-
-            pulado:
-                true
+            sucesso: false,
+            pulado: true
         };
     }
 
@@ -205,20 +207,15 @@ async function tentarProvider({
             `🧠 Tentando ${nome}...`
         );
 
-
         const resposta =
             await executar();
-
 
         console.log(
             `🟢 ${nome} respondeu.`
         );
 
-
         return {
-            sucesso:
-                true,
-
+            sucesso: true,
             resposta
         };
 
@@ -230,16 +227,16 @@ async function tentarProvider({
             )}`
         );
 
+        if (erro.status === 429) {
+            setCooldown(nome);
+        }
 
         return {
-            sucesso:
-                false,
-
+            sucesso: false,
             erro
         };
     }
 }
-
 
 async function tentarGemini(
     prompt
@@ -258,6 +255,10 @@ async function tentarGemini(
         return null;
     }
 
+    if (isInCooldown("Gemini")) {
+        console.log("⚪ Gemini em cooldown. Pulando...");
+        return null;
+    }
 
     try {
 
@@ -265,17 +266,14 @@ async function tentarGemini(
             "🧠 Tentando Gemini..."
         );
 
-
         const resposta =
             await usarGemini(
                 prompt
             );
 
-
         console.log(
             "🟢 Gemini respondeu."
         );
-
 
         return resposta;
 
@@ -288,10 +286,9 @@ async function tentarGemini(
             console.log(
                 "🔴 Gemini atingiu o limite."
             );
-
+            setCooldown("Gemini");
             return null;
         }
-
 
         if (
             erro.status === 503
@@ -305,11 +302,9 @@ async function tentarGemini(
                 "⏳ Tentando novamente em 5 segundos..."
             );
 
-
             await esperar(
                 5000
             );
-
 
             try {
 
@@ -318,11 +313,9 @@ async function tentarGemini(
                         prompt
                     );
 
-
                 console.log(
                     "🟢 Gemini respondeu na segunda tentativa."
                 );
-
 
                 return resposta;
 
@@ -334,11 +327,9 @@ async function tentarGemini(
                     )}`
                 );
 
-
                 return null;
             }
         }
-
 
         console.log(
             `🔴 Gemini falhou: ${erroCurto(
@@ -346,11 +337,9 @@ async function tentarGemini(
             )}`
         );
 
-
         return null;
     }
 }
-
 
 async function usarIA(prompt) {
 
@@ -360,12 +349,10 @@ async function usarIA(prompt) {
             "🧪 TESTE: simulando Gemini indisponível."
         );
 
-
         return usarGroqLazy(
             prompt
         );
     }
-
 
     // =====================================
     // 1. GEMINI
@@ -376,11 +363,9 @@ async function usarIA(prompt) {
             prompt
         );
 
-
     if (gemini) {
         return gemini;
     }
-
 
     // =====================================
     // 2. GROQ
@@ -404,11 +389,9 @@ async function usarIA(prompt) {
                     )
         });
 
-
     if (groq.sucesso) {
         return groq.resposta;
     }
-
 
     // =====================================
     // 3. MISTRAL
@@ -429,11 +412,9 @@ async function usarIA(prompt) {
                     )
         });
 
-
     if (mistral.sucesso) {
         return mistral.resposta;
     }
-
 
     // =====================================
     // 4. CLOUDFLARE
@@ -454,13 +435,11 @@ async function usarIA(prompt) {
                     )
         });
 
-
     if (
         cloudflare.sucesso
     ) {
         return cloudflare.resposta;
     }
-
 
     // =====================================
     // 5. OPENROUTER
@@ -484,19 +463,16 @@ async function usarIA(prompt) {
                     )
         });
 
-
     if (
         openrouter.sucesso
     ) {
         return openrouter.resposta;
     }
 
-
     throw new Error(
         "Todos os provedores de IA configurados estão indisponíveis."
     );
 }
-
 
 function statusProvedores() {
 
@@ -523,7 +499,6 @@ function statusProvedores() {
             )
     };
 }
-
 
 module.exports = {
     usarIA,
