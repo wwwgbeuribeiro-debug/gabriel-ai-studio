@@ -1,5 +1,6 @@
 const { usarIA } = require("../tools/ai");
 const { emitirEvento } = require("../tools/events");
+const autonomous = require("./autonomous");
 
 const developer = require("./developer");
 const content = require("./content");
@@ -94,6 +95,44 @@ async function coordinator(tarefa) {
     );
 
     try {
+
+        if (
+            autonomous.deveExecutarAutonomo(
+                tarefa
+            )
+        ) {
+            console.log(
+                "Carlos entrou em modo autonomo."
+            );
+
+            emitirEvento(
+                "Carlos",
+                "autonomia",
+                "Objetivo recebido para execucao autonoma."
+            );
+
+            const resultadoAutonomo =
+                await autonomous.executarObjetivoAutonomo(
+                    tarefa
+                );
+
+            console.log(
+                "\nRESULTADO AUTONOMO:\n"
+            );
+
+            console.log(
+                resultadoAutonomo
+            );
+
+            emitirEvento(
+                "Carlos",
+                "concluido",
+                "Objetivo autonomo finalizado."
+            );
+
+            return resultadoAutonomo;
+        }
+
         let agenteEscolhido =
             decidirLocalmente(tarefa);
 
