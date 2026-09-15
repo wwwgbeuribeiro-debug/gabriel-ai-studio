@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia Imperial</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">Barbearia Imperial</h1>
+            <nav id="nav">
+                <ul>
+                    <li><a href="#hero">Início</a></li>
+                    <li><a href="#services">Serviços</a></li>
+                    <li><a href="#testimonials">Depoimentos</a></li>
+                    <li><a href="#contact">Contato</a></li>
+                </ul>
+            </nav>
+            <button id="menu-toggle" aria-label="Abrir menu">☰</button>
+        </div>
+    </header>
+
+    <section id="hero" class="hero">
+        <div class="container">
+            <h2>Bem-vindo à Barbearia Imperial</h2>
+            <p>Tradição e estilo em cada corte.</p>
+            <a href="#contact" class="btn">Agende seu horário</a>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <h3>Nossos Serviços</h3>
+            <div class="cards">
+                <article class="card">
+                    <h4>Corte Masculino</h4>
+                    <p>Estilo clássico ou moderno, com atenção aos detalhes.</p>
+                </article>
+                <article class="card">
+                    <h4>Barba e Bigode</h4>
+                    <p>Modelagem, limpeza e cuidados com a pele.</p>
+                </article>
+                <article class="card">
+                    <h4>Cuidados com a Pele</h4>
+                    <p>Limpeza profunda, esfoliação e hidratação.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h3>Depoimentos</h3>
+            <div class="quotes">
+                <blockquote>
+                    <p>"Corte impecável e atendimento de primeira. Recomendo a todos!"</p>
+                    <cite>— João Silva</cite>
+                </blockquote>
+                <blockquote>
+                    <p>"Ambiente acolhedor e profissionais experientes. Volto sempre."</p>
+                    <cite>— Maria Oliveira</cite>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h3>Entre em Contato</h3>
+            <form action="#" method="post" novalidate>
+                <label for="name">Nome</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Mensagem</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+
+                <button type="submit" class="btn">Enviar</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Barbearia Imperial. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

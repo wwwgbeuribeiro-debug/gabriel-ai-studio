@@ -1,0 +1,49 @@
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; background: #f4f4f4; }
+.container { width: 90%; max-width: 1200px; margin: auto; }
+
+/* Header */
+header { background: #222; color: #fff; padding: 1rem 0; position: sticky; top: 0; z-index: 1000; }
+header .logo { font-size: 1.5rem; font-weight: bold; }
+nav ul { list-style: none; display: flex; gap: 1rem; }
+nav a { color: #fff; text-decoration: none; }
+#menu-toggle { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; }
+
+/* Hero */
+.hero { background: url('https://images.unsplash.com/photo-1520880867055-1e30d1cb001c?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat; color: #fff; padding: 4rem 0; text-align: center; }
+.hero h2 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.hero p { font-size: 1.2rem; margin-bottom: 1.5rem; }
+.hero .btn { background: #e63946; color: #fff; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 5px; }
+
+/* Services */
+.services { padding: 3rem 0; background: #fff; }
+.services h3 { text-align: center; margin-bottom: 2rem; }
+.cards { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+.card { background: #fafafa; padding: 1.5rem; flex: 1 1 250px; border-radius: 5px; text-align: center; }
+.card h4 { margin-bottom: 0.5rem; }
+
+/* Testimonials */
+.testimonials { padding: 3rem 0; background: #222; color: #fff; }
+.testimonials h3 { text-align: center; margin-bottom: 2rem; }
+.quotes blockquote { margin: 1rem 0; font-style: italic; }
+.quotes cite { display: block; margin-top: 0.5rem; font-weight: bold; }
+
+/* Contact */
+.contact { padding: 3rem 0; background: #fff; }
+.contact h3 { text-align: center; margin-bottom: 2rem; }
+form { display: flex; flex-direction: column; gap: 1rem; max-width: 500px; margin: auto; }
+label { font-weight: bold; }
+input, textarea { padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px; }
+.btn { background: #e63946; color: #fff; padding: 0.75rem; border: none; border-radius: 5px; cursor: pointer; }
+.btn:hover { background: #d62828; }
+
+/* Footer */
+footer { background: #222; color: #fff; text-align: center; padding: 1rem 0; margin-top: 2rem; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav ul { flex-direction: column; display: none; }
+    #menu-toggle { display: block; }
+    .cards { flex-direction: column; }
+}
