@@ -107,7 +107,7 @@ REGRAS:
 - O projeto deve possuir pelo menos index.html.
 - Crie identidade visual própria para este projeto.
 - Não copie projetos anteriores.
-- Não altere arquivos do Gabriel AI Studio fora de ${pastaRelativa}.
+- Todas as alterações desta tarefa devem ficar exclusivamente dentro de ${pastaRelativa}.
 - Teste os arquivos criados.
 - Corrija erros encontrados antes de concluir.
 - Retorne os arquivos realmente criados.
