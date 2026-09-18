@@ -204,20 +204,17 @@ ${tarefa}
             );
         }
 
-        // Normalizar resultado: extrair texto se for objeto estruturado
-        let resultadoFinal;
-        if (
+        // Preserva o retorno estruturado do agente.
+        // Para exibição, usamos somente o texto amigável.
+        const resultadoExibicao =
             typeof resultado === "object" &&
             resultado !== null &&
             resultado.resultado
-        ) {
-            resultadoFinal = resultado.resultado;
-        } else {
-            resultadoFinal = resultado;
-        }
+                ? resultado.resultado
+                : resultado;
 
         console.log("\n✅ RESULTADO FINAL:\n");
-        console.log(resultadoFinal);
+        console.log(resultadoExibicao);
 
         emitirEvento(
             "Carlos",
@@ -225,7 +222,7 @@ ${tarefa}
             `Tarefa concluída por ${nomes[agenteEscolhido]}.`
         );
 
-        return resultadoFinal;
+        return resultado;
 
     } catch (erro) {
         console.log("\n❌ Ocorreu um erro:");
