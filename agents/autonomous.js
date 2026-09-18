@@ -508,11 +508,16 @@ async function executarAgente(
                 resultado.resultado
             ),
             arquivosAlterados: Array.isArray(
-                resultado.arquivosAlterados
+                resultado.arquivos
             )
-                ? resultado.arquivosAlterados
-                : [],
-            idTarefa: resultado.idTarefa || null
+                ? resultado.arquivos
+                : Array.isArray(resultado.arquivosAlterados)
+                    ? resultado.arquivosAlterados
+                    : [],
+            idTarefa:
+                resultado.taskId ||
+                resultado.idTarefa ||
+                null
         };
     } else {
         resultadoNormalizado = {
