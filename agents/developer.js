@@ -513,13 +513,19 @@ async function developer(tarefa) {
                 `Alteração ${desfeita.idTarefa} desfeita com sucesso.`
             );
 
-            return [
-                `Alteração desfeita: ${desfeita.idTarefa}`,
-                `Arquivos restaurados/removidos: ${desfeita.arquivos.join(", ")}`,
-                teste.resultados.length > 0
-                    ? `Validação: ${formatarTestes(teste)}`
-                    : "Validação: não havia arquivos restantes que precisassem ser testados."
-            ].join("\n");
+            return {
+                taskId: tarefaMemoria.id,
+                status: "concluido",
+                tipo: "desfazer",
+                arquivos: desfeita.arquivos || [],
+                resultado: [
+                    `Alteração desfeita: ${desfeita.idTarefa}`,
+                    `Arquivos restaurados/removidos: ${(desfeita.arquivos || []).join(", ")}`,
+                    teste.resultados.length > 0
+                        ? `Validação: ${formatarTestes(teste)}`
+                        : "Validação: não havia arquivos restantes que precisassem ser testados."
+                ].join("\n")
+            };
         } catch (erro) {
             atualizarStatus(
                 tarefaMemoria.id,
@@ -637,11 +643,17 @@ async function developer(tarefa) {
                 `Arquivo ${caminhoSeguro} criado e validado.`
             );
 
-            return [
-                `Arquivo criado: ${caminhoSeguro}`,
-                `Validação: ${formatarTestes(teste)}`,
-                `Para desfazer: Severino, desfaça a última alteração.`
-            ].join("\n");
+            return {
+                taskId: tarefaMemoria.id,
+                status: "concluido",
+                tipo: "criacao",
+                arquivos: [caminhoSeguro],
+                resultado: [
+                    `Arquivo criado: ${caminhoSeguro}`,
+                    `Validação: ${formatarTestes(teste)}`,
+                    "Para desfazer: Severino, desfaça a última alteração."
+                ].join("\n")
+            };
         } catch (erro) {
             try {
                 restaurarBackup(backup);
@@ -789,7 +801,13 @@ REGRAS:
             "Análise concluída."
         );
 
-        return resultado;
+        return {
+            taskId: tarefaMemoria.id,
+            status: "concluido",
+            tipo: "analise",
+            arquivos: [],
+            resultado
+        };
     }
 
     // ========================================
@@ -1100,16 +1118,22 @@ REGRAS:
                 arquivo.replace(/\\/g, "/").startsWith("tools/")
             );
 
-        return [
-            proposta.resumo ||
-                "Implementação concluída.",
-            "",
-            `Arquivos alterados: ${arquivosAlterados.join(", ")}`,
-            `Testes: ${formatarTestes(teste)}`,
-            precisaReiniciar
-                ? "Reinício do servidor recomendado para carregar alterações de backend."
-                : "As alterações já podem ser usadas sem reiniciar o backend."
-        ].join("\n");
+        return {
+            taskId: tarefaMemoria.id,
+            status: "concluido",
+            tipo: "implementacao",
+            arquivos: arquivosAlterados,
+            precisaReiniciar,
+            resultado: [
+                proposta.resumo || "Implementação concluída.",
+                "",
+                `Arquivos alterados: ${arquivosAlterados.join(", ")}`,
+                `Testes: ${formatarTestes(teste)}`,
+                precisaReiniciar
+                    ? "Reinício do servidor recomendado para carregar alterações de backend."
+                    : "As alterações já podem ser usadas sem reiniciar o backend."
+            ].join("\n")
+        };
 
     } catch (erro) {
         // Se o erro ocorreu antes de um rollback explícito,
