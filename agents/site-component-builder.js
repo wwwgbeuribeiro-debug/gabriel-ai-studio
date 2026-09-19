@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const {
+    usarIA,
     usarIACodigo
 } = require("../tools/ai");
 
@@ -500,6 +501,160 @@ CSS melhorado
 }
 
 
+
+async function revisarHeroComNuvem({
+    briefing,
+    html,
+    css
+}) {
+    const resposta =
+        await usarIA(`
+Voce e um diretor de arte e desenvolvedor front-end senior.
+
+BRIEFING:
+${briefing}
+
+HTML:
+${html}
+
+CSS:
+${css}
+
+Avalie este HERO com criterio alto.
+
+Ele precisa parecer uma interface profissional produzida
+para um cliente real, e nao apenas HTML tecnicamente correto.
+
+CRITERIOS:
+- hierarquia visual forte;
+- identidade visual perceptivel;
+- aparencia premium;
+- composicao interessante;
+- CTA principal claramente dominante;
+- bom aproveitamento do espaco;
+- tipografia bem trabalhada;
+- responsividade;
+- alinhamentos consistentes;
+- nada quebrado;
+- nao parecer template cru ou exercicio basico.
+
+Se estiver realmente bom, responda exatamente:
+
+APROVADO
+
+Caso contrario, responda no maximo 5 linhas:
+
+PROBLEMA: descricao especifica
+
+Nao gere codigo nesta revisao.
+`.trim());
+
+    const texto =
+        String(resposta || "").trim();
+
+    if (/^APROVADO\b/i.test(texto)) {
+        return {
+            aprovado: true,
+            problemas: []
+        };
+    }
+
+    const problemas =
+        texto
+            .split(/\r?\n/)
+            .map(linha => linha.trim())
+            .filter(linha =>
+                /^PROBLEMA:/i.test(linha)
+            )
+            .map(linha =>
+                linha.replace(
+                    /^PROBLEMA:\s*/i,
+                    ""
+                )
+            )
+            .filter(Boolean);
+
+    return {
+        aprovado: false,
+        problemas:
+            problemas.length
+                ? problemas
+                : [
+                    "A revisao de nuvem nao aprovou o hero."
+                ]
+    };
+}
+
+
+async function escalonarHeroNuvem({
+    nome,
+    briefing,
+    html,
+    css,
+    problemas
+}) {
+    console.log("");
+    console.log(
+        "SITE_LOOP: escalonando Hero para IA de nuvem..."
+    );
+
+    const resposta =
+        await usarIA(`
+Voce recebeu um componente que uma IA local tentou criar
+e nao conseguiu atingir qualidade suficiente.
+
+Sua tarefa e melhorar APENAS O HERO.
+
+PROJETO:
+${nome}
+
+BRIEFING ORIGINAL:
+${briefing}
+
+HTML ATUAL:
+${html || "(ainda sem HTML aproveitavel)"}
+
+CSS ATUAL:
+${css || "(ainda sem CSS aproveitavel)"}
+
+PROBLEMAS IDENTIFICADOS:
+${(problemas || [])
+    .map((p, i) => `${i + 1}. ${p}`)
+    .join("\n") || "Qualidade visual insuficiente."}
+
+REGRAS:
+
+- produza um Hero realmente profissional;
+- mantenha o que estiver bom;
+- pode reconstruir o componente se necessario;
+- HTML semantico;
+- visual premium;
+- boa hierarquia;
+- CTA principal forte;
+- responsivo;
+- sem frameworks;
+- sem JavaScript;
+- nao invente arquivos de imagem locais;
+- se nao houver assets, use HTML/CSS para a composicao visual;
+- nao escreva explicacoes fora dos marcadores;
+- nao escreva "HTML melhorado";
+- nao crie outras secoes do site.
+
+Retorne EXATAMENTE:
+
+===HTML===
+fragmento HTML final
+
+===CSS===
+CSS final do Hero
+
+===FIM===
+`.trim());
+
+    return extrairPacote(resposta);
+}
+
+
 async function criarHeroIterativo({
     nome,
     briefing,
@@ -645,27 +800,195 @@ async function criarHeroIterativo({
         );
     }
 
-    estado.status =
-        "precisa_escalonamento";
-
-    salvarEstado(
-        estado
-    );
-
     console.log("");
     console.log(
         "SITE_LOOP: limite local atingido."
     );
 
-    return {
-        taskId,
-        status: "precisa_escalonamento",
-        componente: "hero",
-        tentativa: maxTentativas,
-        html,
-        css,
-        problemas
-    };
+    try {
+        const versaoNuvem =
+            await escalonarHeroNuvem({
+                nome,
+                briefing,
+                html,
+                css,
+                problemas
+            });
+
+        html =
+            versaoNuvem.html;
+
+        css =
+            versaoNuvem.css;
+
+        console.log(
+            "SITE_LOOP: validando resultado da nuvem..."
+        );
+
+        const problemasLocais =
+            avaliarHeroLocal({
+                html,
+                css
+            });
+
+        const revisaoNuvem =
+            await revisarHeroComNuvem({
+                briefing,
+                html,
+                css
+            });
+
+        const problemasFinais = [
+            ...problemasLocais,
+            ...revisaoNuvem.problemas
+        ];
+
+        const aprovado =
+            problemasLocais.length === 0 &&
+            revisaoNuvem.aprovado;
+
+        estado.tentativa =
+            maxTentativas + 1;
+
+        estado.html =
+            html;
+
+        estado.css =
+            css;
+
+        estado.problemas =
+            problemasFinais;
+
+        estado.historico.push({
+            tentativa:
+                maxTentativas + 1,
+
+            origem:
+                "nuvem",
+
+            aprovado,
+
+            problemas:
+                [...problemasFinais],
+
+            htmlChars:
+                html.length,
+
+            cssChars:
+                css.length
+        });
+
+        if (aprovado) {
+            estado.status =
+                "aprovado_nuvem";
+
+            salvarEstado(
+                estado
+            );
+
+            console.log("");
+            console.log(
+                "SITE_LOOP: HERO APROVADO APOS ESCALONAMENTO"
+            );
+
+            return {
+                taskId,
+                status:
+                    "aprovado_nuvem",
+
+                componente:
+                    "hero",
+
+                tentativa:
+                    maxTentativas + 1,
+
+                origem:
+                    "nuvem",
+
+                html,
+                css,
+                problemas: []
+            };
+        }
+
+        estado.status =
+            "precisa_intervencao";
+
+        salvarEstado(
+            estado
+        );
+
+        console.log("");
+        console.log(
+            "SITE_LOOP: nuvem respondeu, mas o Hero ainda nao passou."
+        );
+
+        return {
+            taskId,
+            status:
+                "precisa_intervencao",
+
+            componente:
+                "hero",
+
+            tentativa:
+                maxTentativas + 1,
+
+            origem:
+                "nuvem",
+
+            html,
+            css,
+            problemas:
+                problemasFinais
+        };
+
+    } catch (erro) {
+        estado.status =
+            "precisa_escalonamento";
+
+        estado.problemas = [
+            ...problemas,
+            "Falha no escalonamento para nuvem: " +
+            (
+                erro &&
+                erro.message
+                    ? erro.message
+                    : String(erro)
+            )
+        ];
+
+        salvarEstado(
+            estado
+        );
+
+        console.log(
+            "SITE_LOOP: escalonamento falhou: " +
+            (
+                erro &&
+                erro.message
+                    ? erro.message
+                    : String(erro)
+            )
+        );
+
+        return {
+            taskId,
+            status:
+                "precisa_escalonamento",
+
+            componente:
+                "hero",
+
+            tentativa:
+                maxTentativas,
+
+            html,
+            css,
+            problemas:
+                estado.problemas
+        };
+    }
 }
 
 
