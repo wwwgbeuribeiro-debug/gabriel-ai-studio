@@ -116,8 +116,112 @@ function avaliarHeroLocal({
 }) {
     const problemas = [];
 
+    const htmlTexto =
+        String(html || "").trim();
+
+    const cssTexto =
+        String(css || "").trim();
+
+    // -----------------------------------------
+    // TEXTO SOLTO ANTES DO PRIMEIRO ELEMENTO
+    // Exemplo:
+    // HTML melhorado
+    // <section>...</section>
+    // -----------------------------------------
+
+    const primeiroElemento =
+        htmlTexto.search(
+            /<[a-z][^>]*>/i
+        );
+
+    if (primeiroElemento > 0) {
+        const prefixo =
+            htmlTexto
+                .slice(
+                    0,
+                    primeiroElemento
+                )
+                .replace(
+                    /<!--[\s\S]*?-->/g,
+                    ""
+                )
+                .trim();
+
+        if (prefixo) {
+            problemas.push(
+                "Existe texto solto antes do primeiro elemento HTML: " +
+                JSON.stringify(prefixo.slice(0, 80)) +
+                ". Remova esse texto."
+            );
+        }
+    }
+
+    // -----------------------------------------
+    // IMAGENS
+    // Nesta etapa nenhum asset foi fornecido.
+    // Imagem relativa/local provavelmente foi inventada.
+    // -----------------------------------------
+
+    const imagens =
+        [
+            ...htmlTexto.matchAll(
+                /<img\b[^>]*>/gi
+            )
+        ];
+
+    for (const imagem of imagens) {
+        const tag =
+            imagem[0];
+
+        const srcMatch =
+            tag.match(
+                /\bsrc\s*=\s*["']([^"']*)["']/i
+            );
+
+        if (!srcMatch) {
+            problemas.push(
+                "Existe uma tag img sem atributo src."
+            );
+
+            continue;
+        }
+
+        const src =
+            srcMatch[1].trim();
+
+        if (!src) {
+            problemas.push(
+                "Existe uma imagem com src vazio."
+            );
+
+            continue;
+        }
+
+        const externa =
+            /^(https?:)?\/\//i.test(src);
+
+        const inline =
+            /^data:/i.test(src);
+
+        if (
+            !externa &&
+            !inline
+        ) {
+            problemas.push(
+                "A imagem local " +
+                JSON.stringify(src) +
+                " nao foi fornecida para esta tarefa. " +
+                "Remova a imagem ou substitua por composicao visual feita com HTML/CSS."
+            );
+        }
+    }
+
+    // -----------------------------------------
+    // ESTRUTURA DO HERO
+    // -----------------------------------------
+
     if (
-        !/<section\b/i.test(html)
+        !/<section\b/i.test(htmlTexto)
     ) {
         problemas.push(
             "Use uma section semantica para o hero."
@@ -125,7 +229,7 @@ function avaliarHeroLocal({
     }
 
     if (
-        !/<h1\b/i.test(html)
+        !/<h1\b/i.test(htmlTexto)
     ) {
         problemas.push(
             "O hero precisa ter um H1."
@@ -133,7 +237,7 @@ function avaliarHeroLocal({
     }
 
     if (
-        !/<a\b|<button\b/i.test(html)
+        !/<a\b|<button\b/i.test(htmlTexto)
     ) {
         problemas.push(
             "O hero precisa ter pelo menos um CTA."
@@ -141,7 +245,7 @@ function avaliarHeroLocal({
     }
 
     if (
-        !/hero/i.test(html)
+        !/hero/i.test(htmlTexto)
     ) {
         problemas.push(
             "Use classes descritivas contendo hero."
@@ -149,7 +253,7 @@ function avaliarHeroLocal({
     }
 
     if (
-        !/hero/i.test(css)
+        !/hero/i.test(cssTexto)
     ) {
         problemas.push(
             "O CSS precisa estilizar explicitamente o hero."
@@ -157,7 +261,7 @@ function avaliarHeroLocal({
     }
 
     if (
-        !/display\s*:\s*(flex|grid)/i.test(css)
+        !/display\s*:\s*(flex|grid)/i.test(cssTexto)
     ) {
         problemas.push(
             "Use flex ou grid para controlar o layout."
@@ -165,7 +269,7 @@ function avaliarHeroLocal({
     }
 
     if (
-        !/max-width/i.test(css)
+        !/max-width/i.test(cssTexto)
     ) {
         problemas.push(
             "Defina uma largura maxima para o conteudo."
@@ -173,7 +277,7 @@ function avaliarHeroLocal({
     }
 
     if (
-        !/padding/i.test(css)
+        !/padding/i.test(cssTexto)
     ) {
         problemas.push(
             "Defina espacamento interno adequado."
@@ -181,7 +285,7 @@ function avaliarHeroLocal({
     }
 
     if (
-        !/@media/i.test(css)
+        !/@media/i.test(cssTexto)
     ) {
         problemas.push(
             "Adicione comportamento responsivo."
@@ -189,14 +293,14 @@ function avaliarHeroLocal({
     }
 
     if (
-        /<script\b/i.test(html)
+        /<script\b/i.test(htmlTexto)
     ) {
         problemas.push(
             "O hero nao deve conter JavaScript nesta etapa."
         );
     }
 
-    return problemas;
+    return [...new Set(problemas)];
 }
 
 
