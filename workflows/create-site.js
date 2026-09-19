@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const developer = require("../agents/developer");
+const { criarSiteEspecializado } = require("../agents/site-builder");
 
 function criarSlug(nome) {
     return String(nome || "")
@@ -120,7 +120,12 @@ REGRAS:
     console.log(`Projeto: ${nome}`);
     console.log(`Pasta: ${pastaRelativa}`);
 
-    const resultado = await developer(tarefa);
+    const resultado =
+        await criarSiteEspecializado({
+            nome,
+            pasta: pastaRelativa,
+            briefing: tarefa
+        });
 
     const arquivos =
         validarResultado(
