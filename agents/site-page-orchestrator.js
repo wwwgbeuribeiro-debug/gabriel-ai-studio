@@ -104,7 +104,9 @@ function extrairPacote(resposta) {
 
 async function extrairPacoteRobusto(resposta) {
     try {
-        return await extrairPacoteRobusto(resposta);
+        return extrairPacote(
+            resposta
+        );
 
     } catch (erroInicial) {
         console.log(
@@ -132,16 +134,13 @@ Nao explique.
 Nao remova funcionalidades.
 Nao invente codigo novo.
 
-A resposta original foi:
-
----------------- RESPOSTA ORIGINAL ----------------
+RESPOSTA ORIGINAL:
 
 ${textoOriginal}
 
----------------- FIM ORIGINAL ----------------
+Extraia o HTML e o CSS existentes.
 
-Extraia o HTML e o CSS existentes e responda
-EXATAMENTE neste formato:
+Responda EXATAMENTE:
 
 ===HTML===
 HTML aqui
