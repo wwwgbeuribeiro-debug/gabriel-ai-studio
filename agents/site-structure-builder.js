@@ -45,50 +45,138 @@ async function gerarHTML({
     briefing
 }) {
     console.log(
-        "SITE_STRUCTURE: gerando somente HTML..."
+        "SITE_STRUCTURE: gerando HTML em blocos..."
     );
 
-    const resposta = await usarIA(`
-Voce e um desenvolvedor front-end senior.
+    const partes = [
+        {
+            nome: "header-hero",
+            instrucao: `
+Crie SOMENTE:
+- header responsivo;
+- navegacao;
+- hero principal;
+- CTAs principais;
+- abertura da apresentacao do negocio.
+`
+        },
+        {
+            nome: "conteudo",
+            instrucao: `
+Crie SOMENTE:
+- apresentacao;
+- diferenciais;
+- servicos;
+- antes e depois;
+- depoimentos quando solicitados.
+`
+        },
+        {
+            nome: "agendamento",
+            instrucao: `
+Crie SOMENTE:
+- fluxo visual de agendamento;
+- stepper;
+- escolha de servico;
+- escolha de profissional;
+- data e horario;
+- formulario de anamnese completo;
+- botoes avancar e voltar;
+- resumo de confirmacao.
+`
+        },
+        {
+            nome: "final",
+            instrucao: `
+Crie SOMENTE:
+- FAQ;
+- contato;
+- informacoes finais;
+- footer.
+`
+        }
+    ];
 
-Crie SOMENTE a estrutura HTML completa de um novo site.
+    const fragmentos = [];
+
+    for (const parte of partes) {
+        console.log(
+            "SITE_STRUCTURE: HTML bloco " +
+            parte.nome + "..."
+        );
+
+        const resposta = await usarIA(`
+Voce e um desenvolvedor front-end senior.
 
 PROJETO:
 ${nome}
 
-BRIEFING:
+BRIEFING GERAL:
 ${briefing}
 
-IMPORTANTE:
+BLOCO ATUAL:
+${parte.instrucao}
 
-- Gere somente HTML.
+REGRAS GLOBAIS:
+
+- Gere SOMENTE fragmento HTML.
+- Nao gere <!DOCTYPE>.
+- Nao gere html, head ou body.
 - Nao gere CSS.
 - Nao use tag style.
 - Nao gere JavaScript.
 - Nao use tag script.
-- Crie estrutura visual rica e profissional.
 - Use HTML semantico.
-- Crie classes descritivas.
-- Crie IDs nos elementos que precisarao de interacao.
-- Inclua todas as secoes solicitadas no briefing.
-- Formularios, botoes, cards, navegacao e etapas devem existir no HTML.
-- Nao simplifique o briefing.
+- Use classes descritivas e consistentes.
+- Use prefixos claros por componente.
+- Coloque IDs nos elementos que precisarao de JavaScript.
+- Nao repita secoes de outros blocos.
+- Nao simplifique as funcionalidades solicitadas.
 - Nao use frameworks.
-- Nao escreva explicacoes.
 - Nao use markdown.
+- Nao explique.
 
-Comece obrigatoriamente com:
-
-<!DOCTYPE html>
-
-e termine com:
-
-</html>
+Responda somente com o fragmento HTML.
 `.trim());
 
-    return validarHTML(
-        limparBlocoCodigo(resposta)
+        let fragmento =
+            limparBlocoCodigo(resposta);
+
+        fragmento = fragmento
+            .replace(/<!doctype[^>]*>/gi, "")
+            .replace(/<\/?html[^>]*>/gi, "")
+            .replace(/<head[\s\S]*?<\/head>/gi, "")
+            .replace(/<\/?body[^>]*>/gi, "")
+            .trim();
+
+        if (fragmento.length < 80) {
+            throw new Error(
+                `Bloco HTML ${parte.nome} veio incompleto.`
+            );
+        }
+
+        fragmentos.push(
+            `<!-- BLOCO: ${parte.nome} -->\n${fragmento}`
+        );
+    }
+
+    const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${nome}</title>
+</head>
+<body>
+${fragmentos.join("\n\n")}
+</body>
+</html>`;
+
+    console.log(
+        "SITE_STRUCTURE: HTML montado localmente."
     );
+
+    return validarHTML(html);
 }
 
 
