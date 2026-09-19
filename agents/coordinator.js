@@ -4,6 +4,10 @@ const autonomous = require("./autonomous");
 
 const developer = require("./developer");
 const content = require("./content");
+const {
+    detectarWorkflowLocal,
+    executarWorkflowLocal
+} = require("../workflows");
 
 function decidirLocalmente(tarefa) {
     const texto = tarefa.toLowerCase().trim();
@@ -96,6 +100,33 @@ async function coordinator(tarefa) {
     );
 
     try {
+
+        const workflowLocal =
+            detectarWorkflowLocal(tarefa);
+
+        if (workflowLocal) {
+            console.log("LOCAL_WORKFLOW_SELECTED:", workflowLocal.tipo);
+
+            emitirEvento(
+                "Carlos",
+                "workflow",
+                `Workflow local selecionado: ${workflowLocal.tipo}`
+            );
+
+            const resultadoWorkflow =
+                await executarWorkflowLocal(
+                    workflowLocal,
+                    tarefa
+                );
+
+            emitirEvento(
+                "Carlos",
+                "concluido",
+                `Workflow local concluido: ${workflowLocal.tipo}`
+            );
+
+            return resultadoWorkflow;
+        }
 
         if (
             autonomous.deveExecutarAutonomo(
