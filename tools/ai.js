@@ -1,4 +1,9 @@
 const {
+    usarOllama,
+    disponivel: ollamaDisponivel
+} = require("./providers/ollama");
+
+const {
     GoogleGenAI
 } = require("@google/genai");
 
@@ -341,6 +346,47 @@ async function tentarGemini(
     }
 }
 
+async function usarIACodigo(prompt) {
+    try {
+        const localDisponivel =
+            await ollamaDisponivel();
+
+        if (localDisponivel) {
+            console.log(
+                "LOCAL_AI: tentando Qwen2.5-Coder..."
+            );
+
+            const resposta =
+                await usarOllama(prompt);
+
+            console.log(
+                "LOCAL_AI: Qwen respondeu."
+            );
+
+            return resposta;
+        }
+
+        console.log(
+            "LOCAL_AI: Ollama indisponivel. Usando nuvem..."
+        );
+
+    } catch (erro) {
+        console.log(
+            "LOCAL_AI: Qwen falhou: " +
+            (erro && erro.message
+                ? erro.message
+                : String(erro))
+        );
+
+        console.log(
+            "LOCAL_AI: usando fallback de nuvem..."
+        );
+    }
+
+    return usarIA(prompt);
+}
+
+
 async function usarIA(prompt) {
 
     if (FORCAR_GROQ) {
@@ -502,5 +548,6 @@ function statusProvedores() {
 
 module.exports = {
     usarIA,
+    usarIACodigo,
     statusProvedores
 };
