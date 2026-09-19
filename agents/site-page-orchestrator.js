@@ -258,6 +258,42 @@ function avaliarComponente({
         }
     }
 
+    if (tipo === "agendamento") {
+        if (!/<section\b/i.test(h)) {
+            problemas.push(
+                "Agendamento deve usar uma section semantica."
+            );
+        }
+
+        if (
+            !/id\s*=\s*["']agendamento["']/i.test(h)
+        ) {
+            problemas.push(
+                'A section de agendamento precisa ter id="agendamento".'
+            );
+        }
+
+        if (!/<form\b/i.test(h)) {
+            problemas.push(
+                "Agendamento precisa possuir um formulario."
+            );
+        }
+
+        if (
+            !/<input\b|<select\b|<textarea\b/i.test(h)
+        ) {
+            problemas.push(
+                "Agendamento precisa possuir campos preenchiveis."
+            );
+        }
+
+        if (!/<button\b/i.test(h)) {
+            problemas.push(
+                "Agendamento precisa possuir botao de confirmacao."
+            );
+        }
+    }
+
     if (
         !/display\s*:\s*(flex|grid)/i.test(c)
     ) {
@@ -760,6 +796,47 @@ e com o restante da pagina.`,
     };
 
     // =====================================
+    // AGENDAMENTO
+    // =====================================
+
+    job.etapa = "agendamento";
+    salvarJob(job);
+
+    const agendamento =
+        await criarComponente({
+            tipo: "agendamento",
+            nome,
+
+            briefing:
+`${briefing}
+
+REQUISITOS ESPECIFICOS DO AGENDAMENTO:
+
+- crie uma section com id="agendamento";
+- tenha titulo e explicacao curta;
+- permita escolher um servico;
+- tenha campo de nome;
+- tenha campo de telefone ou WhatsApp;
+- tenha campo de data;
+- tenha campo de horario;
+- tenha botao de confirmar ou continuar;
+- o formulario deve parecer premium;
+- ainda nao precisa enviar para backend;
+- nao use JavaScript nesta etapa.
+`,
+
+            contextoVisual
+        });
+
+    job.componentes.agendamento = {
+        status: "aprovado",
+        origem: agendamento.origem
+    };
+
+    salvarJob(job);
+
+
+    // =====================================
     // MONTAGEM
     // =====================================
 
@@ -772,7 +849,8 @@ e com o restante da pagina.`,
         "body { margin: 0; }",
         header.css,
         hero.css,
-        servicos.css
+        servicos.css,
+        agendamento.css
     ].join("\n\n");
 
     const html = `<!DOCTYPE html>
@@ -797,8 +875,11 @@ ${header.html}
 ${hero.html}
 
 ${servicos.html}
+
+${agendamento.html}
 </main>
 
+<script src="./app.js" defer></script>
 </body>
 </html>`;
 
@@ -830,6 +911,59 @@ ${servicos.html}
         css,
         "utf8"
     );
+
+    const javascript = `
+document.addEventListener("DOMContentLoaded", () => {
+
+    const agendamento =
+        document.getElementById("agendamento");
+
+    document.addEventListener("click", event => {
+
+        const elemento =
+            event.target.closest("a, button");
+
+        if (!elemento) {
+            return;
+        }
+
+        const texto =
+            (elemento.textContent || "")
+                .toLowerCase()
+                .trim();
+
+        const href =
+            elemento.getAttribute("href") || "";
+
+        const querAgendar =
+            href === "#agendamento" ||
+            /agend|consulta|reserv|horario|atendimento/.test(texto);
+
+        if (
+            querAgendar &&
+            agendamento
+        ) {
+            event.preventDefault();
+
+            agendamento.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+    });
+
+});
+`;
+
+    fs.writeFileSync(
+        path.join(
+            pasta,
+            "app.js"
+        ),
+        javascript,
+        "utf8"
+    );
+
 
     job.status =
         "preview_pronto";
