@@ -18,26 +18,20 @@ function normalizar(texto) {
 function extrairNomeSite(tarefa) {
     const texto = limparTexto(tarefa);
 
-    let match = texto.match(
-        /\b(?:chamado|chamada|nomeado|nomeada)\s+["']?([^.,;:\n]+)/i
-    );
+    const padroes = [
+        /\bsite(?:\s+[^\s.,;:]+){0,4}\s+(?:de|para|do|da)\s+(?:(?:um|uma|o|a)\s+)?([^.,;:\n]+)/i,
+        /\b(?:projeto|studio|estudio)\s+(?:chamado|chamada|nomeado|nomeada)\s+["']?([^.,;:\n]+)/i
+    ];
 
-    if (match && match[1]) {
-        return match[1]
-            .replace(/["']/g, "")
-            .trim()
-            .slice(0, 80);
-    }
+    for (const padrao of padroes) {
+        const match = texto.match(padrao);
 
-    match = texto.match(
-        /\bsite\s+(?:de|para)\s+(?:(?:um|uma|o|a)\s+)?([^.,;:\n]+)/i
-    );
-
-    if (match && match[1]) {
-        return match[1]
-            .replace(/["']/g, "")
-            .trim()
-            .slice(0, 80);
+        if (match && match[1]) {
+            return match[1]
+                .replace(/["']/g, "")
+                .trim()
+                .slice(0, 80);
+        }
     }
 
     return "Novo Site";

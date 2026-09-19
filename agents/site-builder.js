@@ -24,7 +24,7 @@ function extrairArquivos(resposta) {
     const texto = String(resposta || "");
 
     const regex =
-        /===FILE:(index\.html|style\.css|app\.js)===\s*([\s\S]*?)(?====FILE:|$)/g;
+        /===\s*FILE\s*:\s*(index\.html|style\.css|app\.js)\s*===\s*([\s\S]*?)(?====\s*FILE\s*:|$)/gi;
 
     const arquivos = {};
 
@@ -59,6 +59,97 @@ function validarPacote(arquivos) {
             );
         }
     }
+}
+
+
+async function completarArquivosAusentes({
+    pacote,
+    nome,
+    briefing
+}) {
+    const obrigatorios = [
+        "index.html",
+        "style.css",
+        "app.js"
+    ];
+
+    const faltando = obrigatorios.filter(
+        arquivo =>
+            !pacote[arquivo] ||
+            pacote[arquivo].trim().length < 20
+    );
+
+    if (faltando.length === 0) {
+        return pacote;
+    }
+
+    console.log(
+        "SITE_BUILDER: arquivos ausentes:",
+        faltando.join(", ")
+    );
+
+    for (const arquivo of faltando) {
+        console.log(
+            `SITE_BUILDER: solicitando somente ${arquivo}...`
+        );
+
+        const referenciasHTML =
+            pacote["index.html"]
+                ? (
+                    pacote["index.html"]
+                        .match(/(?:class|id)=["'][^"']+["']/g) || []
+                )
+                    .slice(0, 120)
+                    .join("\n")
+                : "HTML ainda nao disponivel.";
+
+        const resposta = await usarIA(`
+Voce precisa completar UM UNICO arquivo que faltou em um projeto web.
+
+PROJETO:
+${nome}
+
+ARQUIVO FALTANDO:
+${arquivo}
+
+BRIEFING:
+${briefing}
+
+REFERENCIAS DE CLASSES E IDS DO HTML:
+${referenciasHTML}
+
+REGRAS:
+- Gere somente o arquivo solicitado.
+- Nao explique.
+- Nao gere os outros arquivos.
+- Nao use markdown externo.
+- Preserve o briefing do projeto.
+- Se for CSS, use as classes e IDs informados quando existirem.
+- Se for JavaScript, implemente as interacoes descritas no briefing.
+
+RESPONDA EXATAMENTE ASSIM:
+
+===FILE:${arquivo}===
+conteudo completo do arquivo
+`.trim());
+
+        const recuperados =
+            extrairArquivos(resposta);
+
+        if (
+            recuperados[arquivo] &&
+            recuperados[arquivo].trim().length >= 20
+        ) {
+            pacote[arquivo] =
+                recuperados[arquivo];
+
+            console.log(
+                `SITE_BUILDER: ${arquivo} recuperado.`
+            );
+        }
+    }
+
+    return pacote;
 }
 
 
@@ -203,6 +294,12 @@ conteudo completo do app.js
 
     const pacote =
         extrairArquivos(resposta);
+
+    await completarArquivosAusentes({
+        pacote,
+        nome,
+        briefing
+    });
 
     validarPacote(pacote);
 
