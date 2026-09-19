@@ -1,4 +1,4 @@
-const { usarIA } = require("../tools/ai");
+const { usarIACodigo } = require("../tools/ai");
 
 const {
     extrairContratoHTML,
@@ -105,7 +105,7 @@ Crie SOMENTE:
             parte.nome + "..."
         );
 
-        const resposta = await usarIA(`
+        const resposta = await usarIACodigo(`
 Voce e um desenvolvedor front-end senior.
 
 PROJETO:
@@ -203,7 +203,7 @@ async function gerarCSS({
         "SITE_STRUCTURE: gerando CSS a partir do HTML real..."
     );
 
-    const resposta = await usarIA(`
+    const resposta = await usarIACodigo(`
 Voce e um especialista senior em UI e CSS.
 
 Crie SOMENTE o CSS completo para o HTML real abaixo.
