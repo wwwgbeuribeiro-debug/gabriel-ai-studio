@@ -254,102 +254,247 @@ async function criarSiteEspecializado({
         tentativaPacote++
     ) {
         console.log(
-            "SITE_BUILDER: gerando pacote completo " +
+            "SITE_BUILDER: gerando HTML integrado " +
             tentativaPacote + "/3..."
         );
 
         const respostaTentativa = await usarIA(`
-    Voce e um desenvolvedor web senior.
-    
-    Crie um projeto web NOVO e ORIGINAL.
-    
-    NOME:
-    ${nome}
-    
-    BRIEFING COMPLETO:
-    ${briefing}
-    
-    ARQUIVOS OBRIGATORIOS:
-    - index.html
-    - style.css
-    - app.js
-    
-    REGRAS IMPORTANTES:
-    
-    - Crie uma identidade visual propria.
-    - Nao copie projetos anteriores.
-    - Nao use um template generico apenas trocando cores e textos.
-    - HTML deve carregar ./style.css e ./app.js.
-    - Todo o projeto deve funcionar somente no front-end.
-    - Nao use API paga.
-    - Nao dependa de backend.
-    - Nao use frameworks.
-    - Nao use bibliotecas externas obrigatorias.
-    - Crie layout responsivo.
-    - Implemente de verdade as interacoes solicitadas.
-    - Use HTML semantico.
-    - Use CSS bem organizado.
-    - Use JavaScript valido.
-    - Nao escreva explicacoes.
-    - Nao use blocos markdown envolvendo a resposta.
-    
-    FORMATO OBRIGATORIO:
-    
-    ===FILE:index.html===
-    conteudo completo do index.html
-    
-    ===FILE:style.css===
-    conteudo completo do style.css
-    
-    ===FILE:app.js===
-    conteudo completo do app.js
-    `.trim());
+Voce e um desenvolvedor web senior.
 
-        const pacoteTentativa =
-            extrairArquivos(
-                respostaTentativa
+Crie um site NOVO, ORIGINAL, completo e funcional.
+
+NOME:
+${nome}
+
+BRIEFING COMPLETO:
+${briefing}
+
+FORMA DE TRABALHO:
+
+Crie UM UNICO arquivo HTML autocontido.
+
+O HTML deve conter:
+
+<style>
+TODO O CSS DO SITE
+</style>
+
+e, antes do fechamento de body:
+
+<script>
+TODO O JAVASCRIPT DO SITE
+</script>
+
+Isso e obrigatorio porque HTML, CSS e JavaScript
+precisam ser desenvolvidos juntos como uma unica interface.
+
+REGRAS DE QUALIDADE:
+
+- Crie identidade visual propria.
+- Nao copie projetos anteriores.
+- Nao use template generico apenas trocando cores.
+- Crie hierarquia visual profissional.
+- Hero deve ter presenca visual forte.
+- Formularios devem ser totalmente estilizados.
+- Crie estados hover, focus e active.
+- Crie layout responsivo real.
+- Crie menu adequado para celular.
+- Se houver fluxo em etapas, use stepper visual.
+- Implemente de verdade as interacoes solicitadas.
+- CSS deve usar exatamente as classes e IDs do HTML.
+- JavaScript deve acessar somente elementos que existam no HTML.
+- Nao use frameworks.
+- Nao dependa de backend.
+- Nao dependa de API paga.
+- Nao use base64.
+- Nao use imagens aleatorias sem relacao com o projeto.
+- Prefira composicoes visuais em CSS quando nao houver imagem real.
+- Use HTML semantico.
+- Use JavaScript valido.
+- Priorize completar TODO o documento.
+- Seja conciso no codigo para evitar resposta truncada.
+
+FORMATO OBRIGATORIO:
+
+Responda SOMENTE com o documento HTML completo.
+
+Comece com:
+
+<!DOCTYPE html>
+
+e termine obrigatoriamente com:
+
+</html>
+
+Nao escreva explicacoes antes ou depois.
+Nao use blocos markdown.
+`.trim());
+
+        let documento =
+            String(respostaTentativa || "")
+                .trim();
+
+        documento = documento
+            .replace(/^\`\`\`html\s*/i, "")
+            .replace(/^\`\`\`\s*/i, "")
+            .replace(/\`\`\`\s*$/i, "")
+            .trim();
+
+        const inicioHtml =
+            documento.search(
+                /<!doctype\s+html|<html/i
             );
 
-        const faltando = [
-            "index.html",
-            "style.css",
-            "app.js"
-        ].filter(
-            arquivo =>
-                !pacoteTentativa[arquivo] ||
-                pacoteTentativa[arquivo]
-                    .trim()
-                    .length < 20
-        );
+        const fimHtml =
+            documento.toLowerCase()
+                .lastIndexOf("</html>");
 
-        if (faltando.length === 0) {
-            pacote = pacoteTentativa;
+        if (
+            inicioHtml === -1 ||
+            fimHtml === -1
+        ) {
+            ultimoErroPacote =
+                "Documento HTML truncado ou incompleto.";
 
             console.log(
-                "SITE_BUILDER: pacote completo recebido."
+                "SITE_BUILDER: " +
+                ultimoErroPacote
             );
 
-            break;
+            console.log(
+                "SITE_BUILDER: descartando resposta incompleta."
+            );
+
+            continue;
         }
 
-        ultimoErroPacote =
-            "Pacote incompleto. Faltando: " +
-            faltando.join(", ");
+        documento =
+            documento.slice(
+                inicioHtml,
+                fimHtml + "</html>".length
+            );
+
+        const styleMatch =
+            documento.match(
+                /<style[^>]*>([\s\S]*?)<\/style>/i
+            );
+
+        const scriptMatch =
+            documento.match(
+                /<script(?![^>]*\bsrc\s*=)[^>]*>([\s\S]*?)<\/script>/i
+            );
+
+        if (
+            !styleMatch ||
+            styleMatch[1].trim().length < 20
+        ) {
+            ultimoErroPacote =
+                "HTML nao trouxe um bloco CSS completo.";
+
+            console.log(
+                "SITE_BUILDER: " +
+                ultimoErroPacote
+            );
+
+            console.log(
+                "SITE_BUILDER: descartando resposta incompleta."
+            );
+
+            continue;
+        }
+
+        if (
+            !scriptMatch ||
+            scriptMatch[1].trim().length < 20
+        ) {
+            ultimoErroPacote =
+                "HTML nao trouxe um bloco JavaScript completo.";
+
+            console.log(
+                "SITE_BUILDER: " +
+                ultimoErroPacote
+            );
+
+            console.log(
+                "SITE_BUILDER: descartando resposta incompleta."
+            );
+
+            continue;
+        }
+
+        const css =
+            styleMatch[1].trim();
+
+        const js =
+            scriptMatch[1].trim();
+
+        let html =
+            documento
+                .replace(
+                    styleMatch[0],
+                    ""
+                )
+                .replace(
+                    scriptMatch[0],
+                    ""
+                );
+
+        if (/<\/head>/i.test(html)) {
+            html = html.replace(
+                /<\/head>/i,
+                '    <link rel="stylesheet" href="./style.css">\n</head>'
+            );
+        } else {
+            ultimoErroPacote =
+                "HTML sem fechamento de head.";
+
+            console.log(
+                "SITE_BUILDER: " +
+                ultimoErroPacote
+            );
+
+            continue;
+        }
+
+        if (/<\/body>/i.test(html)) {
+            html = html.replace(
+                /<\/body>/i,
+                '    <script src="./app.js"></script>\n</body>'
+            );
+        } else {
+            ultimoErroPacote =
+                "HTML sem fechamento de body.";
+
+            console.log(
+                "SITE_BUILDER: " +
+                ultimoErroPacote
+            );
+
+            continue;
+        }
+
+        pacote = {
+            "index.html": html.trim(),
+            "style.css": css,
+            "app.js": js
+        };
+
+        validarPacote(pacote);
 
         console.log(
-            "SITE_BUILDER: " + ultimoErroPacote
+            "SITE_BUILDER: HTML, CSS e JS extraidos do mesmo documento."
         );
 
-        console.log(
-            "SITE_BUILDER: descartando pacote incompleto."
-        );
+        break;
     }
 
     if (!pacote) {
         throw new Error(
-            "Nao foi possivel gerar HTML, CSS e JS juntos. " +
-            (ultimoErroPacote ||
-                "Pacote completo nao recebido.")
+            "Nao foi possivel gerar um documento integrado completo. " +
+            (
+                ultimoErroPacote ||
+                "Resposta completa nao recebida."
+            )
         );
     }
 
