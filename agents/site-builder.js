@@ -245,61 +245,113 @@ async function criarSiteEspecializado({
     console.log("");
     console.log("SITE_BUILDER: gerando projeto sem mapear o Studio...");
 
-    const resposta = await usarIA(`
-Voce e um desenvolvedor web senior.
+    let pacote = null;
+    let ultimoErroPacote = null;
 
-Crie um projeto web NOVO e ORIGINAL.
+    for (
+        let tentativaPacote = 1;
+        tentativaPacote <= 3;
+        tentativaPacote++
+    ) {
+        console.log(
+            "SITE_BUILDER: gerando pacote completo " +
+            tentativaPacote + "/3..."
+        );
 
-NOME:
-${nome}
+        const respostaTentativa = await usarIA(`
+    Voce e um desenvolvedor web senior.
+    
+    Crie um projeto web NOVO e ORIGINAL.
+    
+    NOME:
+    ${nome}
+    
+    BRIEFING COMPLETO:
+    ${briefing}
+    
+    ARQUIVOS OBRIGATORIOS:
+    - index.html
+    - style.css
+    - app.js
+    
+    REGRAS IMPORTANTES:
+    
+    - Crie uma identidade visual propria.
+    - Nao copie projetos anteriores.
+    - Nao use um template generico apenas trocando cores e textos.
+    - HTML deve carregar ./style.css e ./app.js.
+    - Todo o projeto deve funcionar somente no front-end.
+    - Nao use API paga.
+    - Nao dependa de backend.
+    - Nao use frameworks.
+    - Nao use bibliotecas externas obrigatorias.
+    - Crie layout responsivo.
+    - Implemente de verdade as interacoes solicitadas.
+    - Use HTML semantico.
+    - Use CSS bem organizado.
+    - Use JavaScript valido.
+    - Nao escreva explicacoes.
+    - Nao use blocos markdown envolvendo a resposta.
+    
+    FORMATO OBRIGATORIO:
+    
+    ===FILE:index.html===
+    conteudo completo do index.html
+    
+    ===FILE:style.css===
+    conteudo completo do style.css
+    
+    ===FILE:app.js===
+    conteudo completo do app.js
+    `.trim());
 
-BRIEFING COMPLETO:
-${briefing}
+        const pacoteTentativa =
+            extrairArquivos(
+                respostaTentativa
+            );
 
-ARQUIVOS OBRIGATORIOS:
-- index.html
-- style.css
-- app.js
+        const faltando = [
+            "index.html",
+            "style.css",
+            "app.js"
+        ].filter(
+            arquivo =>
+                !pacoteTentativa[arquivo] ||
+                pacoteTentativa[arquivo]
+                    .trim()
+                    .length < 20
+        );
 
-REGRAS IMPORTANTES:
+        if (faltando.length === 0) {
+            pacote = pacoteTentativa;
 
-- Crie uma identidade visual propria.
-- Nao copie projetos anteriores.
-- Nao use um template generico apenas trocando cores e textos.
-- HTML deve carregar ./style.css e ./app.js.
-- Todo o projeto deve funcionar somente no front-end.
-- Nao use API paga.
-- Nao dependa de backend.
-- Nao use frameworks.
-- Nao use bibliotecas externas obrigatorias.
-- Crie layout responsivo.
-- Implemente de verdade as interacoes solicitadas.
-- Use HTML semantico.
-- Use CSS bem organizado.
-- Use JavaScript valido.
-- Nao escreva explicacoes.
-- Nao use blocos markdown envolvendo a resposta.
+            console.log(
+                "SITE_BUILDER: pacote completo recebido."
+            );
 
-FORMATO OBRIGATORIO:
+            break;
+        }
 
-===FILE:index.html===
-conteudo completo do index.html
+        ultimoErroPacote =
+            "Pacote incompleto. Faltando: " +
+            faltando.join(", ");
 
-===FILE:style.css===
-conteudo completo do style.css
+        console.log(
+            "SITE_BUILDER: " + ultimoErroPacote
+        );
 
-===FILE:app.js===
-conteudo completo do app.js
-`.trim());
+        console.log(
+            "SITE_BUILDER: descartando pacote incompleto."
+        );
+    }
 
-    const pacote =
-        extrairArquivos(resposta);
-
-    await completarArquivosAusentes({
-        pacote,
-        nome,
-        briefing
-    });
+    if (!pacote) {
+        throw new Error(
+            "Nao foi possivel gerar HTML, CSS e JS juntos. " +
+            (ultimoErroPacote ||
+                "Pacote completo nao recebido.")
+        );
+    }
 
     validarPacote(pacote);
 
