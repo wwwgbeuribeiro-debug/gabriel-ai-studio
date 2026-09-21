@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAMISETAS // Studio &amp; Streetwear Exclusivo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    🔥 CUPOM "CAMISA10" PARA 10% OFF + FRETE GRÁTIS EM COMPRAS ACIMA DE R$ 199
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand-logo">
+        <div class="logo-icon">C</div>
+        <span>CAMISETAS<span class="highlight">.ART</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#catalog" class="active">Catálogo</a></li>
+        <li><a href="#studio">Studio AI &amp; Prompt</a></li>
+        <li><a href="#colecoes">Coleções</a></li>
+        <li><a href="#diferenciais">Qualidade</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="cart-btn-trigger" id="cartOpenBtn">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span>Carrinho</span>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir Menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <span class="badge badge-purple">Streetwear &amp; AI Print Lab</span>
+        <h1>Sua Ideia <span class="gradient-text">Vestida no Peito.</span></h1>
+        <p>Camisetas autênticas em Algodão Penteado Heavyweight 260g. Escolha artes exclusivas do nosso catálogo ou crie o prompt perfeito para sua estampa sob medida.</p>
+
+        <div class="hero-buttons">
+          <a href="#catalog" class="btn btn-primary">
+            Explorar Coleção
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#studio" class="btn btn-secondary">
+            ⚡ Criar com Prompt IA
+          </a>
+        </div>
+
+        <div class="hero-features">
+          <div class="hero-feature-item">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            100% Algodão Premium
+          </div>
+          <div class="hero-feature-item">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            Estampa Ultra HD DTG
+          </div>
+          <div class="hero-feature-item">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            Envio em 24h
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Interactive Visualizer Mockup -->
+      <div class="hero-mockup-card">
+        <div class="mockup-header">
+          <span class="mockup-title">Visualizador 3D Studio</span>
+          <span class="badge badge-rose">Preview Vivo</span>
+        </div>
+
+        <div class="tshirt-wrapper">
+          <!-- SVG Vector T-Shirt -->
+          <svg class="tshirt-svg" id="tshirtVector" viewBox="0 0 300 320" fill="#181a24">
+            <path d="M95 20 C 120 40, 180 40, 205 20 L 280 65 L 245 125 L 215 110 L 215 290 L 85 290 L 85 110 L 55 125 L 20 65 Z" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+            <path d="M95 20 C 120 40, 180 40, 205 20" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="3"/>
+          </svg>
+
+          <!-- Dynamic Print Area -->
+          <div class="tshirt-print-area" id="heroPrintArea" style="background-image: linear-gradient(135deg, #6366f1, #ec4899);">
+            <div class="tshirt-print-text" id="heroPrintText">CYBER<br>PUNK<br>2088</div>
+          </div>
+        </div>
+
+        <div class="mockup-controls">
+          <p style="font-size:0.8rem; color:var(--text-muted)">Cor da Camiseta:</p>
+          <div class="color-picker-row">
+            <div class="color-dot active" style="background: #181a24;" onclick="changeHeroShirtColor('#181a24', this)"></div>
+            <div class="color-dot" style="background: #f8fafc;" onclick="changeHeroShirtColor('#f8fafc', this)"></div>
+            <div class="color-dot" style="background: #1e293b;" onclick="changeHeroShirtColor('#1e293b', this)"></div>
+            <div class="color-dot" style="background: #881337;" onclick="changeHeroShirtColor('#881337', this)"></div>
+            <div class="color-dot" style="background: #064e3b;" onclick="changeHeroShirtColor('#064e3b', this)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Prompt Studio Section -->
+  <section class="studio-section" id="studio">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-purple">Gerador &amp; Customizador</span>
+        <h2>Crie o Prompt da Sua Camiseta</h2>
+        <p>Gere prompts otimizados para Midjourney/DALL-E ou personalize sua estampa exclusiva para produzir na hora conosco.</p>
+      </div>
+
+      <div class="studio-grid">
+        <div class="studio-form-col">
+          <div class="form-group">
+            <label class="form-label">1. Tema ou Conceito Central</label>
+            <input type="text" id="promptConcept" class="form-control" placeholder="Ex: Gato astronauta no espaço cyberpunk com luzes de neon..." value="Tigre cibernético em estética retro synthwave">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">2. Estilo Artístico</label>
+            <select id="promptStyle" class="form-select" onchange="updatePromptGenerator()">
+              <option value="Cyberpunk Neon Streetwear">Cyberpunk &amp; Neon</option>
+              <option value="Minimalist Japanese Typography">Tipografia Japonesa Minimalista</option>
+              <option value="Retro 80s Synthwave Vector">Retro 80s Synthwave</option>
+              <option value="Vintage Botanical Engraving">Gravura Vintage / Botânica</option>
+              <option value="Abstract Modern Geometry">Abstrato Moderno</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">3. Tags de Detalhamento</label>
+            <div class="chips-container" id="promptChips">
+              <div class="chip active" onclick="toggleChip(this)">Heavy Details</div>
+              <div class="chip active" onclick="toggleChip(this)">Vector Art</div>
+              <div class="chip" onclick="toggleChip(this)">Black Background</div>
+              <div class="chip active" onclick="toggleChip(this)">DTG Print Ready</div>
+              <div class="chip" onclick="toggleChip(this)">4K Resolution</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="studio-preview-col">
+          <label class="form-label">Prompt Final Gerado para IA:</label>
+          <div class="prompt-result-box">
+            <div class="prompt-result-text" id="finalPromptText">
+              /imagine prompt: Cybernetic tiger in retro synthwave aesthetic, vector art, DTG print ready, high contrast graphic tee design, vector style, isolated illustration --v 6.0
+            </div>
+            <button class="btn btn-secondary copy-btn" onclick="copyPrompt()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              Copiar Prompt IA
+            </button>
+          </div>
+
+          <div style="margin-top: 24px; text-align: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
+            <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom: 12px;">Quer encomendar esta estampa criada?</p>
+            <button class="btn btn-primary" style="width:100%" onclick="addCustomShirtToCart()">
+              🚀 Encomendar Camiseta Customizada (R$ 99,90)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Catalog Section -->
+  <section class="catalog-section" id="catalog">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-rose">Coleção Exclusiva</span>
+        <h2>Catálogo de Camisetas</h2>
+        <p>Modelagens oversize e tradicional. Tecido 100% Algodão Heavyweight com acabamento de alta gramatura.</p>
+      </div>
+
+      <div class="catalog-controls">
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="filterCatalog('all', this)">Todas</button>
+          <button class="filter-tab" onclick="filterCatalog('streetwear', this)">Streetwear</button>
+          <button class="filter-tab" onclick="filterCatalog('minimal', this)">Minimalista</button>
+          <button class="filter-tab" onclick="filterCatalog('cyber', this)">Cyber &amp; Tech</button>
+          <button class="filter-tab" onclick="filterCatalog('anime', this)">Geek &amp; Anime</button>
+        </div>
+
+        <div>
+          <select class="form-select" id="sortSelect" onchange="sortCatalog()" style="padding: 6px 14px; font-size: 0.85rem;">
+            <option value="popular">Mais Populares</option>
+            <option value="price-asc">Menor Preço</option>
+            <option value="price-desc">Maior Preço</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Product Cards Container -->
+      <div class="product-grid" id="productGrid">
+        <!-- Injected dynamically via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Features / Quality Banner -->
+  <section class="features-banner" id="diferenciais">
+    <div class="container">
+      <div class="features-grid">
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          </div>
+          <div>
+            <h4>Algodão 260g Heavy</h4>
+            <p>Malha encorpada de altíssima durabilidade que não encolhe após a lavagem.</p>
+          </div>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <h4>Impressão Direct-to-Garment</h4>
+            <p>Estampa digital de ultra definição integrada às fibras do algodão com toque zero.</p>
+          </div>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          </div>
+          <div>
+            <h4>Troca Grátis em 30 Dias</h4>
+            <p>Se o tamanho não ficar perfeito, realizamos a troca sem nenhum custo adicional.</p>
+          </div>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <div>
+            <h4>Entrega Expressa</h4>
+            <p>Despachamos seu pedido para todo o Brasil em até 24h úteis.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="#" class="brand-logo" style="margin-bottom: 16px; display: inline-flex;">
+            <div class="logo-icon">C</div>
+            <span>CAMISETAS<span class="highlight">.ART</span></span>
+          </a>
+          <p style="font-size:0.875rem; margin-bottom: 20px;">Plataforma autoral de vestuário streetwear e gerador de estampas personalizadas por Inteligência Artificial.</p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Navegação</h5>
+          <ul class="footer-links">
+            <li><a href="#catalog">Catálogo Completo</a></li>
+            <li><a href="#studio">Studio AI Prompt</a></li>
+            <li><a href="#diferenciais">Guia de Tamanhos</a></li>
+            <li><a href="#diferenciais">Nossa Qualidade</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Atendimento</h5>
+          <ul class="footer-links">
+            <li><a href="#">FAQ / Dúvidas Frequentes</a></li>
+            <li><a href="#">Política de Trocas</a></li>
+            <li><a href="#">Rastrear Pedido</a></li>
+            <li><a href="#">Fale Conosco</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Newsletter</h5>
+          <p style="font-size:0.85rem; margin-bottom: 12px;">Receba cupons exclusivos e novas coleções em primeira mão.</p>
+          <div style="display:flex; gap:8px;">
+            <input type="email" placeholder="Seu e-mail" class="form-control" style="padding:8px 12px; font-size:0.85rem;">
+            <button class="btn btn-primary" onclick="alert('Inscrito com sucesso!')">OK</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2025 CAMISETAS.ART - Todos os direitos reservados.</div>
+        <div style="display:flex; gap:16px;">
+          <span>Pagamentos Via PIX e Cartão</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Cart Drawer Overlay & Drawer -->
+  <div class="cart-drawer-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Seu Carrinho (<span id="cartDrawerCount">0</span>)</h3>
+      <button class="close-btn" onclick="closeCart()">&times;</button>
+    </div>
+
+    <div class="cart-body" id="cartItemsList">
+      <!-- Items dynamically added here -->
+    </div>
+
+    <div class="cart-footer">
+      <div class="coupon-box">
+        <input type="text" id="couponInput" class="form-control" placeholder="Cupom (Ex: CAMISA10)">
+        <button class="btn btn-secondary" onclick="applyCoupon()">Aplicar</button>
+      </div>
+
+      <div class="cart-summary-row">
+        <span>Subtotal</span>
+        <span id="cartSubtotal">R$ 0,00</span>
+      </div>
+      <div class="cart-summary-row" id="discountRow" style="display:none; color:var(--accent-secondary);">
+        <span>Desconto (10%)</span>
+        <span id="cartDiscount">-R$ 0,00</span>
+      </div>
+      <div class="cart-summary-row">
+        <span>Frete</span>
+        <span id="cartShipping">Grátis</span>
+      </div>
+
+      <div class="cart-summary-row total">
+        <span>Total</span>
+        <span id="cartTotal">R$ 0,00</span>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%; margin-top:16px;" onclick="openCheckoutModal()">
+        Finalizar Compra
+      </button>
+    </div>
+  </div>
+
+  <!-- Checkout Stepper Modal -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+        <h3 style="font-size:1.3rem;">Finalizar Pedido</h3>
+        <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
+      </div>
+
+      <!-- Stepper -->
+      <div class="stepper">
+        <div class="step-item active" id="stepIndicator1">
+          <div class="step-number">1</div>
+          <div class="step-label">Dados</div>
+        </div>
+        <div class="step-item" id="stepIndicator2">
+          <div class="step-number">2</div>
+          <div class="step-label">Entrega</div>
+        </div>
+        <div class="step-item" id="stepIndicator3">
+          <div class="step-number">3</div>
+          <div class="step-label">Pagamento</div>
+        </div>
+      </div>
+
+      <!-- Step 1 Content -->
+      <div id="stepContent1">
+        <div class="form-group">
+          <label class="form-label">Nome Completo</label>
+          <input type="text" class="form-control" id="custName" placeholder="Seu nome">
+        </div>
+        <div class="form-group">
+          <label class="form-label">E-mail para Confirmação</label>
+          <input type="email" class="form-control" id="custEmail" placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">CPF</label>
+          <input type="text" class="form-control" placeholder="000.000.000-00">
+        </div>
+        <button class="btn btn-primary" style="width: 100%;" onclick="goToStep(2)">Continuar para Entrega</button>
+      </div>
+
+      <!-- Step 2 Content -->
+      <div id="stepContent2" style="display: none;">
+        <div class="form-group">
+          <label class="form-label">CEP</label>
+          <input type="text" class="form-control" placeholder="00000-000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Endereço de Entrega</label>
+          <input type="text" class="form-control" placeholder="Rua, Número, Bairro, Cidade">
+        </div>
+        <div style="display:flex; gap:12px;">
+          <button class="btn btn-secondary" style="flex:1;" onclick="goToStep(1)">Voltar</button>
+          <button class="btn btn-primary" style="flex:1;" onclick="goToStep(3)">Ir para Pagamento</button>
+        </div>
+      </div>
+
+      <!-- Step 3 Content -->
+      <div id="stepContent3" style="display: none;">
+        <div class="form-group">
+          <label class="form-label">Forma de Pagamento</label>
+          <select class="form-select" id="payMethod">
+            <option value="pix">⚡ PIX (Aprovação Instantânea)</option>
+            <option value="card">💳 Cartão de Crédito</option>
+          </select>
+        </div>
+        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; margin-bottom: 20px;" id="pixBox">
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Você receberá o QR Code PIX para pagamento com desconto adicional após clicar em confirmar.</p>
+        </div>
+        <div style="display:flex; gap:12px;">
+          <button class="btn btn-secondary" style="flex:1;" onclick="goToStep(2)">Voltar</button>
+          <button class="btn btn-accent" style="flex:1;" onclick="finishOrder()">Confirmar Pedido</button>
+        </div>
+      </div>
+
+      <!-- Step 4 Success Content -->
+      <div id="stepContent4" style="display: none; text-align: center; padding: 20px 0;">
+        <div style="width: 60px; height: 60px; background: rgba(16, 185, 129, 0.2); border-radius: 50%; color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 16px;">
+          ✓
+        </div>
+        <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Pedido Realizado!</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">
+          Número do pedido: <strong style="color: var(--accent-glow);" id="orderNumber">#CM-84920</strong>.<br>
+          Enviamos os detalhes da compra e o rastreamento para o seu e-mail.
+        </p>
+        <button class="btn btn-primary" onclick="closeCheckoutModal()">Concluir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <span id="toastMsg">Item adicionado ao carrinho!</span>
+  </div>
+
+  
+    <script src="./app.js"></script>
+</body>
+</html>
