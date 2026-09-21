@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildFlow AI - Dashboard & Automation</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">⚡</div>
+                <div class="brand-text">
+                    <span class="brand-name">BuildFlow</span>
+                    <span class="brand-badge">AI</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-view="pipelines">
+                    <span class="nav-icon">⚡</span>
+                    <span>Pipelines</span>
+                </a>
+                <a href="#" class="nav-item" data-view="models">
+                    <span class="nav-icon">🧠</span>
+                    <span>Modelos AI</span>
+                </a>
+                <a href="#" class="nav-item" data-view="logs">
+                    <span class="nav-icon">📜</span>
+                    <span>Logs & Analytics</span>
+                </a>
+                <a href="#" class="nav-item" data-view="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Configurações</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="system-status">
+                    <span class="status-dot online"></span>
+                    <span class="status-text">Agentes Ativos: 8/8</span>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">BF</div>
+                    <div class="user-info">
+                        <span class="user-name">Gabriel Studio</span>
+                        <span class="user-role">Plano Enterprise</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header Bar -->
+            <header class="top-header">
+                <div class="header-title">
+                    <h1>Painel de Orquestração AI</h1>
+                    <p>Monitore, filtre e execute pipelines inteligentes em tempo real</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="btn-refresh">
+                        <span class="icon">🔄</span> Atualizar
+                    </button>
+
+                    <button class="btn btn-primary" id="btn-open-modal">
+                        <span class="icon">➕</span> Novo Workflow
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Stats Overview -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Pipelines Ativos</span>
+                        <span class="stat-icon cyan">⚡</span>
+                    </div>
+                    <div class="stat-value" id="stat-active-count">12</div>
+                    <div class="stat-change positive">
+                        <span>↑ 18%</span> este mês
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Taxa de Sucesso</span>
+                        <span class="stat-icon green">🎯</span>
+                    </div>
+                    <div class="stat-value" id="stat-success-rate">99.4%</div>
+                    <div class="stat-change positive">
+                        <span>↑ 0.8%</span> estabilidade
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Execuções Hoje</span>
+                        <span class="stat-icon purple">🚀</span>
+                    </div>
+                    <div class="stat-value" id="stat-executions">1,482</div>
+                    <div class="stat-change positive">
+                        <span>↑ 240</span> últimas 24h
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Tempo Médio</span>
+                        <span class="stat-icon orange">⏱️</span>
+                    </div>
+                    <div class="stat-value">1.2s</div>
+                    <div class="stat-change negative">
+                        <span>↓ 0.3s</span> otimizado
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controls & Filters Section -->
+            <section class="filters-section">
+                <div class="filter-group search-group">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="Buscar workflows, modelos ou tags...">
+                </div>
+
+                <div class="filter-group select-group">
+                    <select id="category-filter" class="custom-select">
+                        <option value="all">Todas as Categorias</option>
+                        <option value="automation">Automação de Código</option>
+                        <option value="content">Geração de Conteúdo</option>
+                        <option value="data">Análise de Dados</option>
+                        <option value="agent">Agentes Multi-IA</option>
+                    </select>
+
+                    <select id="status-filter" class="custom-select">
+                        <option value="all">Todos os Status</option>
+                        <option value="active">Ativo</option>
+                        <option value="paused">Pausado</option>
+                        <option value="failed">Erro</option>
+                    </select>
+
+                    <select id="sort-filter" class="custom-select">
+                        <option value="newest">Mais Recentes</option>
+                        <option value="oldest">Mais Antigos</option>
+                        <option value="name">Nome (A-Z)</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Workflow Items Grid -->
+            <section class="workflows-container">
+                <div class="section-header">
+                    <h2>Workflows Cadastrados (<span id="workflow-count">0</span>)</h2>
+                    <span class="tag-status-live"><span class="dot"></span> Live Sync</span>
+                </div>
+
+                <div class="workflows-grid" id="workflows-grid">
+                    <!-- Items dinâmicos via JS -->
+                </div>
+
+                <div class="empty-state hidden" id="empty-state">
+                    <div class="empty-icon">📂</div>
+                    <h3>Nenhum workflow encontrado</h3>
+                    <p>Tente ajustar os filtros ou crie um novo workflow de IA.</p>
+                    <button class="btn btn-primary" id="btn-empty-create">Criar Workflow</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal Form: Add New Workflow -->
+    <div class="modal-overlay hidden" id="modal-overlay">
+        <div class="modal-card">
+            <header class="modal-header">
+                <div class="modal-title-box">
+                    <h2>Criar Novo Workflow BuildFlow AI</h2>
+                    <p>Configure um pipeline de IA para automatizar suas tarefas</p>
+                </div>
+                <button class="modal-close-btn" id="modal-close">&times;</button>
+            </header>
+
+            <form id="workflow-form" class="modal-form">
+                <div class="form-group">
+                    <label for="wf-title">Nome do Workflow <span class="required">*</span></label>
+                    <input type="text" id="wf-title" placeholder="Ex: Otimizador de Código JS" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="wf-category">Categoria <span class="required">*</span></label>
+                        <select id="wf-category" required class="custom-select">
+                            <option value="">Selecione...</option>
+                            <option value="automation">Automação de Código</option>
+                            <option value="content">Geração de Conteúdo</option>
+                            <option value="data">Análise de Dados</option>
+                            <option value="agent">Agentes Multi-IA</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="wf-model">Modelo de IA <span class="required">*</span></label>
+                        <select id="wf-model" required class="custom-select">
+                            <option value="Gemini 1.5 Pro">Gemini 1.5 Pro</option>
+                            <option value="Claude 3.5 Sonnet">Claude 3.5 Sonnet</option>
+                            <option value="GPT-4o">GPT-4o</option>
+                            <option value="Llama 3 70B">Llama 3 70B</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="wf-trigger">Gatilho de Execução</label>
+                        <select id="wf-trigger" class="custom-select">
+                            <option value="Webhook HTTP">Webhook HTTP</option>
+                            <option value="Agendamento (Cron)">Agendamento (Cron)</option>
+                            <option value="Evento de Git">Evento de Git / Commit</option>
+                            <option value="Manual / API">Manual / API</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="wf-status">Status Inicial</label>
+                        <select id="wf-status" class="custom-select">
+                            <option value="active">Ativo</option>
+                            <option value="paused">Pausado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="wf-description">Descrição & Instruções do Agente</label>
+                    <textarea id="wf-description" rows="3" placeholder="Descreva o objetivo deste workflow e instruções para o modelo AI..."></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btn-submit-wf">
+                        <span class="icon">✨</span> Salvar Workflow
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
