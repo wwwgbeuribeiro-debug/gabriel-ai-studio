@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Novo Site</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header>
+  <div class="logo">Novo Site</div>
+  <nav id="nav">
+    <ul>
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#about">Sobre</a></li>
+      <li><a href="#services">Serviços</a></li>
+      <li><a href="#contact">Contato</a></li>
+    </ul>
+  </nav>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<section class="hero" id="hero">
+  <h1>Bem-vindo ao Novo Site</h1>
+  <p>Descubra soluções inovadoras para seu negócio.</p>
+  <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Entre em Contato</button>
+</section>
+
+<section id="about">
+  <h2>Sobre Nós</h2>
+  <p>Somos uma equipe dedicada a criar experiências digitais marcantes. Nosso foco é transformar ideias em soluções práticas e eficazes, sempre mantendo a qualidade e a inovação como pilares centrais.</p>
+</section>
+
+<section id="services">
+  <h2>Serviços</h2>
+  <div class="cards">
+    <article class="card">
+      <h3>Desenvolvimento Web</h3>
+      <p>Projetos sob medida, responsivos e otimizados para performance.</p>
+    </article>
+    <article class="card">
+      <h3>UX/UI Design</h3>
+      <p>Interface intuitiva e experiências de usuário excepcionais.</p>
+    </article>
+    <article class="card">
+      <h3>Consultoria Digital</h3>
+      <p>Estratégias que impulsionam sua presença online.</p>
+    </article>
+  </div>
+</section>
+
+<section id="contact">
+  <h2>Contato</h2>
+  <form id="contactForm">
+    <label for="name">Nome</label>
+    <input type="text" id="name" name="name" required>
+    <label for="email">E-mail</label>
+    <input type="email" id="email" name="email" required>
+    <label for="message">Mensagem</label>
+    <textarea id="message" name="message" rows="5" required></textarea>
+    <button type="submit">Enviar</button>
+  </form>
+</section>
+
+<footer>
+  <p>&copy; 2026 Novo Site. Todos os direitos reservados.</p>
+</footer>
+
+
+    <script src="./app.js"></script>
+</body>
+</html>
